@@ -19,3 +19,10 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
+# /purchases
+# /purchases/${id}
+# /subscriptions
+# /subscriptions/${id}
+# /favorites
+# /favorites/${id}
+# /ingredients?query=${text}
