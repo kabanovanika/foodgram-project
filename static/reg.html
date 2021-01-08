@@ -6,7 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Регистрация</title>
-    <link rel="stylesheet" href="static/pages/form.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'pages/form.css' %}">
 </head>
 <body class="body">
 <header class="header">
@@ -17,7 +18,7 @@
                 <li class="nav__item nav__item_disabled"><a href="#" class="nav__link link">Список покупок</a></li>
             </ul>
             <ul class="nav__items list">
-                <li class="nav__item"><a href="#" class="nav__link link">Войти</a></li>
+                <li class="nav__item"><a href="/auth/login" class="nav__link link">Войти</a></li>
                 <li class="nav__item"><a href="#" class="button button_style_blue">Создать аккаунт</a></li>
             </ul>
         </div>

@@ -5,8 +5,9 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Французские тосты</title>
-    <link rel="stylesheet" href="static/pages/single.css">
+    <title>{{ recipe.name }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'pages/single.css' %}">
 </head>
 <body class="body">
 <header class="header">
@@ -17,7 +18,7 @@
                 <li class="nav__item"><a href="#" class="nav__link link">Список покупок</a><span class="badge badge_style_blue nav__badge" id="counter">4</span></li>
             </ul>
             <ul class="nav__items list">
-                <li class="nav__item"><a href="#" class="nav__link link">Войти</a></li>
+                <li class="nav__item"><a href="/auth/login" class="nav__link link">Войти</a></li>
                 <li class="nav__item"><a href="#" class="button button_style_blue">Создать аккаунт</a></li>
             </ul>
         </div>
@@ -28,7 +29,7 @@
             <img src="static/images/testCardImg.png" alt="какой-то текст" class="single-card__image">
             <div class="single-card__info">
                 <div class="single-card__header-info">
-                    <h1 class="single-card__title">Французские тосты</h1>
+                    <h1 class="single-card__title">{{ recipe.name }}</h1>
 
                 </div>
                 <ul class="single-card__items">
@@ -37,28 +38,23 @@
                     <li class="single-card__item"><span class="badge badge_style_purple">Ужин</span></li>
                 </ul>
                 <div class="single-card__items single-card__items_column">
-                    <p class="single-card__text"><span class="icon-time"></span> 20 мин.</p>
-                    <p class="single-card__text"><span class="icon-user"></span> Вероника Чернова</p>
+                    <p class="single-card__text"><span class="icon-time"></span> {{ cooking_time }} мин.</p>
+                    <p class="single-card__text"><span class="icon-user"></span> {{ author }}</p>
                 </div>
                 <ul class="single-card__items">
                     <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
                 </ul>
                 <div class="single-card__section">
-                    <h3 class="single-card__section-title">Ингридиенты:</h3>
+                    <h3 class="single-card__section-title">Ингредиенты:</h3>
                     <div class="single-card__items single-card__items_column">
-                        <p class=" single-card__section-item">Яйцо - 2 шт.</p>
-                        <p class=" single-card__section-item">Молоко - 200 мл.</p>
-                        <p class=" single-card__section-item">Тосты - 4 шт.</p>
-                        <p class=" single-card__section-item">Сахар 2 сл.л.</p>
-                        <p class=" single-card__section-item">Яйцо - 2 шт.</p>
-                        <p class=" single-card__section-item">Молоко - 200 мл.</p>
+                        {% for ingredient in ingredients %}
+                        <p class=" single-card__section-item">{{ingredient.ingredient}} - {{ingredient.amount}} {{ingredient.ingredient.dimension}}</p>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="single-card__section">
                     <h3 class="single-card__section-title">Описание:</h3>
-                    <p class=" single-card__section-text">Смешать молоко с сахаром, добавить яйца, тщательно все взбить.
-                        Обмакнуть тосты в смесь и жарить на сливочном масле до золотистой корочки.</p>
-                    <p class=" single-card__section-text">Полить сверху сиропом топинамбура и украсить ягодами.</p>
+                    <p class=" single-card__section-text">{{ description }}</p>
                 </div>
             </div>
         </div>

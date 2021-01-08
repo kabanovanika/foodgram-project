@@ -7,7 +7,6 @@ User = get_user_model()
 class Ingredient(models.Model):
     title = models.CharField(max_length=300)
     dimension = models.CharField(max_length=300)
-    # part = models.ManyToManyField('Recipe', through='RecipeIngredient')
 
     def __str__(self):
         return self.title
@@ -38,9 +37,6 @@ class Recipe(models.Model):
     cooking_time = models.IntegerField(null=True)
     slug = models.SlugField(unique=True, null=True)
     pub_date = models.DateTimeField("date published", auto_now_add=True)
-    # ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredient')
-    # ingredients = models.ManyToManyField(
-    #       'Ingredient', verbose_name='Ингредиенты', )
 
     class Meta:
         ordering = ('-pub_date',)
@@ -62,6 +58,8 @@ class RecipeIngredient(models.Model):
     )
     amount = models.PositiveSmallIntegerField()
 
+    def __str__(self):
+        return self.ingredient
 
 class Follow(models.Model):
     user = models.ForeignKey(User,

@@ -6,7 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Рецепты</title>
-    <link rel="stylesheet" href="static/pages/index.css">
+        {% load static %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 </head>
 <body class="body">
   <header class="header">
@@ -14,7 +15,7 @@
           <div class="nav__container container">
               <ul class="nav__items list">
                   <li class="nav__item nav__item_active"><a href="#" class="nav__link link">Рецепты</a></li>
-                  <li class="nav__item"><a href="#" class="nav__link link">Мои подписки</a></li>
+                  <li class="nav__item"><a href="/subscriptions" class="nav__link link">Мои подписки</a></li>
                   <li class="nav__item"><a href="/recipe" class="nav__link link">Создать рецепт</a></li>
                   <li class="nav__item"><a href="#" class="nav__link link">Избранное</a></li>
                   <li class="nav__item"><a href="#" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter">4</span></li>
