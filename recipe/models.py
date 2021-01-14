@@ -24,18 +24,17 @@ class Tag(models.Model):
 class Recipe(models.Model):
     author = models.ForeignKey(User,
                                on_delete=models.CASCADE,
-                               related_name="user_recipes")
+                               related_name="recipes")
     name = models.CharField(max_length=300)
     image = models.ImageField(upload_to='recipes/', blank=True, null=True)
     text = models.TextField()
     ingredients = models.ManyToManyField(
         Ingredient,
-        related_name='recipe_ingredient',
-        through='RecipeIngredient'
+        through='RecipeIngredient',
+        through_fields=('recipe', 'ingredient')
     )
-    tag = models.ManyToManyField(Tag)
-    cooking_time = models.IntegerField(null=True)
-    slug = models.SlugField(unique=True, null=True)
+    tag = models.ManyToManyField(Tag, related_name="recipes")
+    cooking_time = models.IntegerField(default=0)
     pub_date = models.DateTimeField("date published", auto_now_add=True)
 
     class Meta:
@@ -49,17 +48,17 @@ class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name='ingredients'
+        related_name='recipe_ingredients'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name='recipes'
     )
-    amount = models.PositiveSmallIntegerField()
+    amount = models.IntegerField()
 
     def __str__(self):
-        return self.ingredient
+        return f"{self.ingredient.title} - {self.amount} ({self.ingredient.dimension})"
 
 class Follow(models.Model):
     user = models.ForeignKey(User,

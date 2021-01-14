@@ -15,7 +15,7 @@
             <ul class="nav__items list">
                 <li class="nav__item"><a href="/" class="nav__link link">Рецепты</a></li>
                 <li class="nav__item"><a href="/subscriptions" class="nav__link link">Мои подписки</a></li>
-                <li class="nav__item"><a href="/recipe" class="nav__link link">Создать рецепт</a></li>
+                <li class="nav__item"><a href="/new" class="nav__link link">Создать рецепт</a></li>
                 <li class="nav__item"><a href="#" class="nav__link link">Избранное</a></li>
                 <li class="nav__item"><a href="#" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter"></span></li>
 
@@ -31,17 +31,17 @@
     <div class="main__header">
         <h1 class="main__title">Создание рецепта</h1>
     </div>
-    <div class="form-container">
-        <form class="form" method="post" enctype="multipart/form-data" action="{% url 'formRecipe' %}">
+    <form class="form" method="post" action="{% url 'formRecipe' %}">
+            {% csrf_token %}
             <div class="form__group">
-                <label for="id_name" class="form__label">Название рецепта</label>
+            <label for="name" class="form__label">{{ form.name.label_tag }}</label>
                 <div class="form__field-group">
-                    <input type="text" id="id_name" name="name" class="form__input">
-                    <span class="form__error"></span>
+                    <input type="text" id="name" class="form__input" name="name">
+                    <span class="form__error">{{ form.name.errors }}</span>
                 </div>
             </div>
             <div class="form__group">
-                <p class="form__label">Теги</p>
+                <p class="form__label">{{ form.tag.label_tag }}</p>
                 <div class="form__field-group">
                     <div class="tags">
                         <div class="tags__item">
@@ -57,7 +57,7 @@
                             <label for="id_dinner" class="tags__label">Ужин</label>
                         </div>
                     </div>
-                    <span class="form__error"></span>
+                    <span class="form__error">{{ form.tag.errors }}</span>
                 </div>
             </div>
             <div class="form__group">
@@ -77,31 +77,30 @@
                     <span class="form__ingredient-link" id="addIng">Добавить ингредиент</span>
                     <span class="form__error"></span>
                 </div>
-            </div>
-            <div class="form__group">
-                <label for="id_time" class="form__label">Время приготовления</label>
+            </div>            <div class="form__group">
+                <label for="id_time" class="form__label">{{ form.cooking_time.label_tag }}</label>
                 <div class="form__field-group form__field-group_time">
-                    <input type="text" id="id_time" name="name" class="form__input">
+                    <input type="text" id="id_time" name="cooking_time" class="form__input">
                     <label for="id_time" class="form__label">минут</label>
                     <span class="form__error"></span>
                 </div>
             </div>
             <div class="form__group">
-                <label for="id_description" class="form__label">Описание</label>
+                <label for="id_description" class="form__label">{{ form.text.label_tag }}</label>
                 <div class="form__field-group">
-                    <textarea name="description" id="id_description" rows="8" class="form__textarea"></textarea>
-                    <span class="form__error"></span>
+                    <textarea name="text" id="id_description" rows="8" class="form__textarea"></textarea>
+                    <span class="form__error">{{ form.text.errors }}</span>
                 </div>
             </div>
             <div class="form__group">
                 <span class="form__label">Загрузить фото</span>
                 <div class="form__field-group">
-                    <input type="file" name="file" id="id_file">
-                    <span class="form__error"></span>
+                    <input type="file" name="image" id="id_file">
+                    <span class="form__error">{{ form.image.errors }}</span>
                 </div>
             </div>
             <div class="form__footer">
-                <button class="button button_style_blue">Создать рецепт</button>
+                <button type="submit" class="button button_style_blue">Создать рецепт</button>
             </div>
         </form>
     </div>

@@ -1,9 +1,26 @@
 # from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-
 from .forms import RecipeForm, RecipeIngredientsForm
 from .models import Recipe, Ingredient, RecipeIngredient
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+import json
+from django.http import JsonResponse
+
+
+@api_view(('GET',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def getIngredients(request):
+    query = request.GET.get('query')
+    queryset = Ingredient.objects.filter(title__startswith=query)
+    ing_list = []
+    for item in queryset:
+        dict_response = {"title": item.title, "dimension": item.dimension}
+        ing_list.append(dict_response)
+    return JsonResponse(ing_list, safe=False)
 
 
 def index(request):
@@ -19,16 +36,32 @@ def index(request):
 
 
 def new_recipe(request):
-    form = RecipeForm(request.POST or None, files=request.FILES or None)
-
+    form = RecipeForm(request.POST)
+    print('я сюда зашел')
+    print(form.data)
+    print(request.POST.dict())
     if request.method == 'POST':
         if form.is_valid():
+            print('форма валидна')
             if request.user.is_authenticated:
                 recipe = Recipe(**form.cleaned_data, author=request.user)
                 recipe.save()
+                i = 1
+                for field in form.data:
+                    if field.startswith('nameIngredient_'):
+                        print('я тут')
+                        recipe_ingredient = request.POST[f'nameIngredient_{i}']
+                        amount = request.POST[f'valueIngredient_{i}']
+                        print(recipe_ingredient, amount)
+                        k = Ingredient.objects.get(title=recipe_ingredient)
+                        print(k, k.pk)
+                        RecipeIngredient.objects.create(recipe_id=recipe.pk,
+                                                        ingredient=Ingredient.objects.get(title=recipe_ingredient),
+                                                        amount=amount)
+                        i += 1
                 return redirect('/')
-            return redirect('/auth/login')
-    return render(request, "formRecipe.html", {"form": form})
+        return redirect('/auth/login')
+    return render(request, "formRecipe.html", {"form": form, })
 
 
 def subscriptions(request):
@@ -51,3 +84,33 @@ def recipe_page(request, username, recipe_id):
         "description": description,
 
     })
+
+#
+# if request.user.is_authenticated:
+#     recipe = Recipe(**form.cleaned_data, author=request.user)
+#     recipe.save()
+#     i = 1
+#     for field in form.data:
+#         if field.startswith('nameIngredient_'):
+#             recipe_ingredient = request.POST[f'nameIngredient_{i}']
+#             amount = request.POST[f'valueIngredient_{i}']
+#             RecipeIngredient.objects.create(recipe_id=recipe.pk,
+#                                             ingredient=Ingredient.objects.get(title=recipe_ingredient),
+#                                             amount=amount)
+#             i += 1
+
+
+# def new_recipe(request):
+#     form = RecipeForm(request.POST)
+#     print('я сюда зашел')
+#     print(form.data)
+#     print(request.POST.dict())
+#     if request.method == 'POST':
+#         if form.is_valid():
+#             print('форма валидна')
+#             if request.user.is_authenticated:
+#                 recipe = Recipe(**form.cleaned_data, author=request.user)
+#                 recipe.save()
+#                 return redirect('/')
+#             return redirect('/auth/login')
+#     return render(request, "formRecipe.html", {"form": form, })
