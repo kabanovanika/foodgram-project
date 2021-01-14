@@ -2,7 +2,7 @@
 <!--        <img class="card__image" src="{{ recipe.image }}"/>-->
                     <a href="#" class="link" target="_blank"><img src="{{ recipe.image }}" alt="Какой-то текст" class="card__image"></a>
         <div class="card__body">
-            <a class="card__title link" href="#" target="_blank">{{ recipe.name }}</a>
+            <a class="card__title link" href="/recipe/{{recipe.id}}" target="_blank">{{ recipe.name }}</a>
             <ul class="card__items">
                 <li class="card__item"><span class="badge badge_style_green">Обед</span></li>
                 <li class="card__item"><span class="badge badge_style_orange">Завтрак</span></li>

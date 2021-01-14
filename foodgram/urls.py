@@ -37,4 +37,3 @@ if settings.DEBUG:
 # /subscriptions/${id}
 # /favorites
 # /favorites/${id}
-# /ingredients?query=${text}

@@ -1,7 +1,7 @@
 # from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from .forms import RecipeForm, RecipeIngredientsForm
+from .forms import RecipeForm
 from .models import Recipe, Ingredient, RecipeIngredient
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,7 +13,7 @@ from django.http import JsonResponse
 
 @api_view(('GET',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-def getIngredients(request):
+def get_ingredients(request):
     query = request.GET.get('query')
     queryset = Ingredient.objects.filter(title__startswith=query)
     ing_list = []
@@ -37,30 +37,23 @@ def index(request):
 
 def new_recipe(request):
     form = RecipeForm(request.POST)
-    print('я сюда зашел')
-    print(form.data)
-    print(request.POST.dict())
     if request.method == 'POST':
         if form.is_valid():
-            print('форма валидна')
             if request.user.is_authenticated:
                 recipe = Recipe(**form.cleaned_data, author=request.user)
                 recipe.save()
                 i = 1
                 for field in form.data:
                     if field.startswith('nameIngredient_'):
-                        print('я тут')
                         recipe_ingredient = request.POST[f'nameIngredient_{i}']
                         amount = request.POST[f'valueIngredient_{i}']
-                        print(recipe_ingredient, amount)
                         k = Ingredient.objects.get(title=recipe_ingredient)
-                        print(k, k.pk)
                         RecipeIngredient.objects.create(recipe_id=recipe.pk,
                                                         ingredient=Ingredient.objects.get(title=recipe_ingredient),
                                                         amount=amount)
                         i += 1
                 return redirect('/')
-        return redirect('/auth/login')
+            return redirect('/auth/login')
     return render(request, "formRecipe.html", {"form": form, })
 
 
@@ -68,10 +61,9 @@ def subscriptions(request):
     return render(request, "myFollow.html")
 
 
-def recipe_page(request, username, recipe_id):
+def recipe_page(request, recipe_id):
     recipe = get_object_or_404(Recipe,
-                               id__exact=recipe_id,
-                               author__username=username)
+                               id__exact=recipe_id)
     author = recipe.author
     cooking_time = recipe.cooking_time
     ingredients = RecipeIngredient.objects.filter(recipe_id=recipe_id)
