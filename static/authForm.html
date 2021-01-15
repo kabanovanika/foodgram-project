@@ -9,6 +9,13 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'pages/form.css' %}">
 </head>
+        {% if form.errors %}
+        {% for error in form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error|escape }}
+            </div>
+        {% endfor %}
+    {% endif %}
 <body class="body">
 <header class="header">
     <nav class="nav">
@@ -29,7 +36,8 @@
         <h1 class="main__title">Войти на сайт</h1>
     </div>
     <div class="form-container">
-        <form class="form">
+        <form class="form" method="post" action="{% url 'login' %}">
+            {% csrf_token %}
             <div class="form__group">
                 <label for="id_username" class="form__label">Имя</label>
                 <div class="form__field-group">
@@ -45,7 +53,7 @@
                 </div>
             </div>
             <div class="form__footer">
-                <button class="button button_style_blue">Войти</button>
+                <button class="button button_style_blue" type="submit">Войти</button>
                 <a class="form__forgot-link">Забыли пароль?</a>
             </div>
         </form>

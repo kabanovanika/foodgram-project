@@ -6,7 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Редактирование рецепта</title>
-    <link rel="stylesheet" href="static/pages/form.css">
+        {% load static %}
+    <link rel="stylesheet" href="{% static 'pages/form.css' %}">
 </head>
 <body class="body">
 <header class="header">
@@ -116,7 +117,7 @@
                 </div>
             </div>
             <div class="form__footer">
-                <button class="button button_style_blue">Сохранить</button> <a style="margin-left: 2.5em" href="#" class="form__ingredient-link">Удалить</a>
+                <button type=submit class="button button_style_blue">Сохранить</button> <a style="margin-left: 2.5em" href="#" class="form__ingredient-link">Удалить</a>
             </div>
         </form>
     </div>
@@ -136,6 +137,6 @@
 <script src="{% static 'js/components/Header.js' %}"></script>
 <script src="static/js/utils/debouncing.js"></script>
 <script src="{% static 'js/api/Api.js' %}"></script>
-<script src="static/formRecipe.js"></script>
+<script src="{% static 'formRecipe.js' %}"></script>
 </body>
 </html>
