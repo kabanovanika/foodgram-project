@@ -1,13 +1,9 @@
-# from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import RecipeForm
 from .models import Recipe, Ingredient, RecipeIngredient
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-import json
 from django.http import JsonResponse
 
 
@@ -25,20 +21,22 @@ def get_ingredients(request):
 
 def index(request):
     recipes = Recipe.objects.all()
-    paginator = Paginator(recipes, 5)
-
+    paginator = Paginator(recipes, 6)
+    image = Recipe.image
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'indexAuth.html', {
         'page': page,
-        'paginator': paginator
+        'paginator': paginator,
+        'image': image,
     })
 
 
 def new_recipe(request):
-    form = RecipeForm(request.POST)
+    form = RecipeForm(request.POST or None, files=request.FILES or None)
     if request.method == 'POST':
         if form.is_valid():
+            print(form.data)
             if request.user.is_authenticated:
                 recipe = Recipe(**form.cleaned_data, author=request.user)
                 recipe.save()
@@ -64,6 +62,7 @@ def subscriptions(request):
 def recipe_page(request, recipe_id):
     recipe = get_object_or_404(Recipe,
                                id__exact=recipe_id)
+    image = recipe.image
     author = recipe.author
     cooking_time = recipe.cooking_time
     ingredients = RecipeIngredient.objects.filter(recipe_id=recipe_id)
@@ -71,6 +70,7 @@ def recipe_page(request, recipe_id):
     return render(request, "singlePageNotAuth.html", {
         "recipe": recipe,
         "author": author,
+        "image": image,
         "cooking_time": cooking_time,
         "ingredients": ingredients,
         "description": description,

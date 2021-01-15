@@ -6,6 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Создание рецепта</title>
+       {% load static %}
     <link rel="stylesheet" href="static/pages/form.css">
 </head>
 <body class="body">
@@ -31,7 +32,7 @@
     <div class="main__header">
         <h1 class="main__title">Создание рецепта</h1>
     </div>
-    <form class="form" method="post" action="{% url 'formRecipe' %}">
+    <form class="form" method="post" action="{% url 'formRecipe' %}" enctype='multipart/form-data'>
             {% csrf_token %}
             <div class="form__group">
             <label for="name" class="form__label">{{ form.name.label_tag }}</label>
@@ -116,10 +117,10 @@
         </ul>
     </div>
 </footer>
-<script src="static/js/config/config.js"></script>
-<script src="static/js/components/Header.js"></script>
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
 <script src="static/js/utils/debouncing.js"></script>
-<script src="static/js/api/Api.js"></script>
+<script src="{% static 'js/api/Api.js' %}"></script>
 <script src="static/formRecipe.js"></script>
 </body>
 </html>
