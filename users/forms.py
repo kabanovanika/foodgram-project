@@ -30,11 +30,11 @@ class CreationForm(UserCreationForm):
 
 
 class PasswordChangingForm(PasswordChangeForm):
-    old_password = forms.CharField(max_length=100,
+    old_password = forms.CharField(max_length=100, label='Старый пароль',
                                    widget=forms.PasswordInput(attrs={'class': 'form__input', 'type': 'password'}))
-    new_password1 = forms.CharField(max_length=100,
+    new_password1 = forms.CharField(max_length=100, label='Новый пароль',
                                     widget=forms.PasswordInput(attrs={'class': 'form__input', 'type': 'password'}))
-    new_password2 = forms.CharField(max_length=100,
+    new_password2 = forms.CharField(max_length=100, label='Подтверждение нового пароля',
                                     widget=forms.PasswordInput(attrs={'class': 'form__input', 'type': 'password'}))
 
     class Meta:
