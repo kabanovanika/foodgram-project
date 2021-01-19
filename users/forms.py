@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import password_validation
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 class SignUpForm(UserCreationForm):
@@ -26,3 +27,16 @@ class CreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ("first_name", "last_name", "username", "email")
+
+
+class PasswordChangingForm(PasswordChangeForm):
+    old_password = forms.CharField(max_length=100,
+                                   widget=forms.PasswordInput(attrs={'class': 'form__input', 'type': 'password'}))
+    new_password1 = forms.CharField(max_length=100,
+                                    widget=forms.PasswordInput(attrs={'class': 'form__input', 'type': 'password'}))
+    new_password2 = forms.CharField(max_length=100,
+                                    widget=forms.PasswordInput(attrs={'class': 'form__input', 'type': 'password'}))
+
+    class Meta:
+        model = User
+        fields = ('old_password', 'new_password1', 'new_password2')
