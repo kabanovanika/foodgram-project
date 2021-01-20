@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.urls import reverse_lazy
-from .forms import SignUpForm, PasswordChangingForm
+from .forms import SignUpForm, PasswordChangingForm, PasswordsResetForm
 from django.contrib.auth import authenticate, login
 
 
@@ -10,8 +10,17 @@ class PasswordsChangeView(PasswordChangeView):
     success_url = reverse_lazy('password_success')
 
 
+class PasswordsResetView(PasswordResetView):
+    form_class = PasswordsResetForm
+    success_url = reverse_lazy('reset_success')
+
+
 def password_success(request):
     return render(request, 'password_success.html')
+
+
+def reset_success(request):
+    return render(request, 'reset_success.html')
 
 
 def view_login(request):

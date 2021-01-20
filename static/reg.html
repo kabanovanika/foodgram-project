@@ -29,59 +29,38 @@
         <h1 class="main__title">Регистрация</h1>
     </div>
     <div class="form-container">
-<!--            <form method="post" >-->
-<!--        {% csrf_token %}-->
-
-<!--        {% for field in form %}-->
-<!--            <p>-->
-<!--              {{ field.label_tag }}<br>-->
-<!--              {{ field }}-->
-<!--              {% if field.help_text %}-->
-<!--                <small style="color: grey">{{ field.help_text }}</small>-->
-<!--              {% endif %}-->
-<!--              {% for error in field.errors %}-->
-<!--                <p style="color: red">{{ error }}</p>-->
-<!--              {% endfor %}-->
-<!--            </p>-->
-<!--          {% endfor %}-->
-        <form class="form" method="post" action="{% url 'signup' %}">
+        <form class="form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
-
-            {% for field in form %}
-                <div class="form__group">
-                    <label class="form__label">{{ field.label_tag }}</label>
-                    <div class="form__field-group">
-                        {{ field }}
-                        {% for error in field.errors %}
-                            <span class="form__error">{{ error }}</span>
-                        {% endfor %}
-                    </div>
+            <div class="form__group">
+                <label for="id_name" class="form__label">Имя</label>
+                <div class="form__field-group">
+                    <input type="text" name="name" id="id_name" class="form__input">
+                    <span class="form__error"></span>
                 </div>
-            {% endfor %}
-<!--            <div class="form__group">-->
-<!--                <label for="id_username" class="form__label">Имя пользователя</label>-->
-<!--                <div class="form__field-group">-->
-<!--                    <input type="text" name="username" id="id_username" class="form__input">-->
-<!--                    <span class="form__error">Имя пользователя и пароль не совпадают. Введите правильные данные.-->
-<!--                    </span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form__group">-->
-<!--                <label for="id_email" class="form__label">Адрес электронной почты</label>-->
-<!--                <div class="form__field-group">-->
-<!--                    <input type="email" name="email" id="id_email" class="form__input">-->
-<!--                    <span class="form__error"></span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="form__group">-->
-<!--                <label for="id_password" class="form__label">Пароль</label>-->
-<!--                <div class="form__field-group">-->
-<!--                    <input type="password" name="password" id="id_password" class="form__input">-->
-<!--                    <span class="form__error"></span>-->
-<!--                </div>-->
-<!--            </div>-->
+            </div>
+            <div class="form__group">
+                <label for="id_username" class="form__label">Имя пользователя</label>
+                <div class="form__field-group">
+                    <input type="text" name="username" id="id_username" class="form__input">
+                    <span class="form__error"></span>
+                </div>
+            </div>
+            <div class="form__group">
+                <label for="id_email" class="form__label">Адрес электронной почты</label>
+                <div class="form__field-group">
+                    <input type="email" name="email" id="id_email" class="form__input">
+                    <span class="form__error"></span>
+                </div>
+            </div>
+            <div class="form__group">
+                <label for="id_password1" class="form__label">Пароль</label>
+                <div class="form__field-group">
+                    <input type="password" name="password1" id="id_password1" class="form__input">
+                    <span class="form__error"></span>
+                </div>
+            </div>
             <div class="form__footer">
-                <button type="submit" class="button button_style_blue">Создать аккаунт</button>
+                <button type=submit class="button button_style_blue">Создать аккаунт</button>
             </div>
         </form>
     </div>
