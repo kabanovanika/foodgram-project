@@ -17,13 +17,13 @@
                 <li class="nav__item"><a href="/" class="nav__link link">Рецепты</a></li>
                 <li class="nav__item"><a href="/subscriptions" class="nav__link link">Мои подписки</a></li>
                 <li class="nav__item"><a href="/new" class="nav__link link">Создать рецепт</a></li>
-                <li class="nav__item"><a href="#" class="nav__link link">Избранное</a></li>
-                <li class="nav__item"><a href="#" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter"></span></li>
+                <li class="nav__item"><a href="/favorites" class="nav__link link">Избранное</a></li>
+                <li class="nav__item"><a href="/purchases" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter"></span></li>
 
             </ul>
             <ul class="nav__items list">
                <li class="nav__item"><a href="auth/password-change" class="nav__link link">Изменить пароль</a></li>
-                <li class="nav__item"><a href="#" class="nav__link link">Выход</a></li>
+                <li class="nav__item"><a href="{% url 'logout'%}" class="nav__link link">Выход</a></li>
             </ul>
         </div>
     </nav>
@@ -32,6 +32,13 @@
     <div class="main__header">
         <h1 class="main__title">Создание рецепта</h1>
     </div>
+      {% if form.errors %}
+                    {% for error in form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error|escape }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
     <form class="form" method="post" action="{% url 'formRecipe' %}" enctype='multipart/form-data'>
             {% csrf_token %}
             <div class="form__group">

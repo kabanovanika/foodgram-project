@@ -60,6 +60,7 @@ class RecipeIngredient(models.Model):
     def __str__(self):
         return f"{self.ingredient.title} - {self.amount} ({self.ingredient.dimension})"
 
+
 class Follow(models.Model):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE,

@@ -15,7 +15,7 @@
         <div class="nav__container container">
             <ul class="nav__items list">
                 <li class="nav__item nav__item_disabled"><a href="/" class="nav__link link">Рецепты</a></li>
-                <li class="nav__item nav__item_disabled"><a href="#" class="nav__link link">Список покупок</a></li>
+                <li class="nav__item nav__item_disabled"><a href="/purchases" class="nav__link link">Список покупок</a></li>
             </ul>
             <ul class="nav__items list">
                 <li class="nav__item"><a href="/auth/login" class="nav__link link">Войти</a></li>
@@ -31,34 +31,35 @@
     <div class="form-container">
         <form class="form" method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
-            <div class="form__group">
-                <label for="id_name" class="form__label">Имя</label>
-                <div class="form__field-group">
-                    <input type="text" name="name" id="id_name" class="form__input">
-                    <span class="form__error"></span>
-                </div>
-            </div>
-            <div class="form__group">
-                <label for="id_username" class="form__label">Имя пользователя</label>
-                <div class="form__field-group">
-                    <input type="text" name="username" id="id_username" class="form__input">
-                    <span class="form__error"></span>
-                </div>
-            </div>
-            <div class="form__group">
-                <label for="id_email" class="form__label">Адрес электронной почты</label>
-                <div class="form__field-group">
-                    <input type="email" name="email" id="id_email" class="form__input">
-                    <span class="form__error"></span>
-                </div>
-            </div>
-            <div class="form__group">
-                <label for="id_password1" class="form__label">Пароль</label>
-                <div class="form__field-group">
-                    <input type="password" name="password1" id="id_password1" class="form__input">
-                    <span class="form__error"></span>
-                </div>
-            </div>
+            {{ form.as_ul }}
+<!--            <div class="form__group">-->
+<!--                <label for="id_name" class="form__label">Имя</label>-->
+<!--                <div class="form__field-group">-->
+<!--                    <input type="text" name="name" id="id_name" class="form__input">-->
+<!--                    <span class="form__error"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form__group">-->
+<!--                <label for="id_username" class="form__label">Имя пользователя</label>-->
+<!--                <div class="form__field-group">-->
+<!--                    <input type="text" name="username" id="id_username" class="form__input">-->
+<!--                    <span class="form__error"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form__group">-->
+<!--                <label for="id_email" class="form__label">Адрес электронной почты</label>-->
+<!--                <div class="form__field-group">-->
+<!--                    <input type="email" name="email" id="id_email" class="form__input">-->
+<!--                    <span class="form__error"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="form__group">-->
+<!--                <label for="id_password1" class="form__label">Пароль</label>-->
+<!--                <div class="form__field-group">-->
+<!--                    <input type="password" name="password1" id="id_password1" class="form__input">-->
+<!--                    <span class="form__error"></span>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="form__footer">
                 <button type=submit class="button button_style_blue">Создать аккаунт</button>
             </div>
