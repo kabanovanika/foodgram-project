@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 {% csrf_token %}
+{% load thumbnail %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -33,50 +34,42 @@
     <div class="main__header">
         <h1 class="main__title">Мои подписки</h1>
     </div>
-    <div class="card-list">
-
-            {% for recipe in page %}
-                {% include "recipe_onpage.html" with recipe=recipe %}
-            {% endfor %}
-
-    </div>
 <!--    <div class="card-list">-->
-<!--        <div class="card-user" data-author="700">-->
-<!--        <div class="card-user__header">-->
-<!--            <h2 class="card-user__title">Вероника Чернова</h2>-->
-<!--        </div>-->
-<!--        <div class="card-user__body">-->
-<!--            <ul class="card-user__items">-->
-<!--                <li class="card-user__item">-->
-<!--                    <div class="recipe">-->
-<!--                        <img src="static/images/testCardImg.png" alt="какой-то-текст" class="recipe__image">-->
-<!--                        <h3 class="recipe__title">Французские тосты</h3>-->
-<!--                        <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>-->
-<!--                    </div>-->
-<!--                </li>-->
-<!--                <li class="card-user__item">-->
-<!--                    <div class="recipe">-->
-<!--                        <img src="static/images/testCardImg.png" alt="какой-то-текст" class="recipe__image">-->
-<!--                        <h3 class="recipe__title">Французские тосты</h3>-->
-<!--                        <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>-->
-<!--                    </div>-->
-<!--                </li>-->
-<!--                <li class="card-user__item">-->
-<!--                    <div class="recipe">-->
-<!--                        <img src="static/images/testCardImg.png" alt="какой-то-текст" class="recipe__image">-->
-<!--                        <h3 class="recipe__title">Французские тосты</h3>-->
-<!--                        <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>-->
-<!--                    </div>-->
-<!--                </li>-->
-<!--                <li class="card-user__item">-->
-<!--                    <a href="#" class="card-user__link link">Еще 7 рецептов...</a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--        <div class="card-user__footer">-->
-<!--            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>-->
-<!--        </div>-->
+
+<!--            {% for recipe in page %}-->
+<!--                {% include "recipe_onpage.html" with recipe=recipe %}-->
+<!--            {% endfor %}-->
+
 <!--    </div>-->
+    {% for recipe in recipes %}
+    <div class="card-list">
+        <div class="card-user" data-author={{ recipe.author.id }}>
+        <div class="card-user__header">
+            <h2 class="card-user__title">{{ recipe.author}}</h2>
+        </div>
+        <div class="card-user__body">
+            <ul class="card-user__items">
+                <li class="card-user__item">
+                    <div class="recipe">
+                        {% thumbnail recipe.image  "350x339" crop="center" upscale=True as im %}
+                         <img  class="recipe__image" src="{{ im.url }}" alt="какой-то текст" />
+                        {% endthumbnail %}
+<!--                        <img src="static/images/testCardImg.png" alt="какой-то-текст" class="recipe__image">-->
+                        <h3 class="recipe__title">{{ recipe.name }}</h3>
+                        <p class="recipe__text"><span class="icon-time"></span> {{recipe.cooking_time }}</p>
+                    </div>
+                </li>
+
+                {% endfor %}
+                <li class="card-user__item">
+                    <a href="#" class="card-user__link link">Еще 7 рецептов...</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-user__footer">
+            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
+        </div>
+    </div>
 <!--        <div class="card-user" data-author="707">-->
 <!--            <div class="card-user__header">-->
 <!--                <h2 class="card-user__title">Вероника Чернова</h2>-->

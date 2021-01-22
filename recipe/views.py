@@ -48,7 +48,6 @@ def index(request):
     image = Recipe.image
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    print(request.user.is_authenticated)
     if request.user.is_authenticated:
         return render(request, 'indexAuth.html', {
             'page': page,
@@ -207,12 +206,18 @@ def profile(request, username):
 
 @login_required
 @csrf_exempt
-def profile_follow(request, username):
-    print('профиль фоллоу')
-    author = get_object_or_404(User, username=username)
-    if request.user != author:
-        Follow.objects.get_or_create(author=author, user=request.user)
-    return render(request, 'myFollow.html')
+def profile_follow(request):
+    following = Follow.objects.filter(user=request.user).values('author')
+    recipes = Recipe.objects.filter(author__in=following)
+
+    paginator = Paginator(recipes, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'myfollow.html', {
+        'recipes': recipes,
+        'page': page,
+        'paginator': paginator
+    })
 
 
 @login_required
