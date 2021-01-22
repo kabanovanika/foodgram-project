@@ -35,12 +35,12 @@ def view_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/')
+            return redirect('/home')
         else:
             return redirect('/auth/signup')
     return render(request, 'authForm.html')
-# ndmittr
-# ndmittr1234
+
+
 def signup_view(request):
     form = SignUpForm(request.POST)
     print('валидна?')
@@ -59,7 +59,7 @@ def signup_view(request):
         name = form.cleaned_data.get('name')
         user = authenticate(username=username, password=password, name=name)
         login(request, user)
-        return redirect('/')
+        return redirect('/home')
     else:
         form = SignUpForm()
     return render(request, 'reg.html', {'form': form})

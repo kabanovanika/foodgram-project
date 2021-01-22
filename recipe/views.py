@@ -1,10 +1,16 @@
+import json
+
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.views import View
+from rest_framework import viewsets
+
 from .forms import RecipeForm
 from .models import Recipe, Ingredient, RecipeIngredient, User, Follow
 from rest_framework.decorators import api_view, renderer_classes
 from django.contrib.auth.decorators import login_required
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 
@@ -21,9 +27,6 @@ def get_ingredients(request):
 
 
 def get_ingredients_for_recipe_form(query_data):
-    """
-    Возвращает список с названием ингредиентов
-    """
     ingredients = [
         query_data[key]
         for key in query_data.keys()
@@ -45,6 +48,7 @@ def index(request):
     image = Recipe.image
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+    print(request.user.is_authenticated)
     if request.user.is_authenticated:
         return render(request, 'indexAuth.html', {
             'page': page,
@@ -59,6 +63,7 @@ def index(request):
         })
 
 
+@login_required
 def new_recipe(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     if request.method == 'POST':
@@ -80,18 +85,48 @@ def new_recipe(request):
     return render(request, "formRecipe.html", {"form": form, })
 
 
-@login_required
-def subscriptions(request):
-    following = Follow.objects.filter(user=request.user).values('author')
-    recipes = Recipe.objects.filter(author__in=following)
+# @login_required
+# @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+# class Subscriptions(View):
+#     def __init__(self, request):
+#         print(self)
+#         print(request)
+#
+#     def post(self, request):
+#         print(request)
+#         reg = json.loads(request.body)
+#         user_id = reg.get("id", None)
+#         if user_id is not None:
+#             author = get_object_or_404(User, id__exact=user_id)
+#             if request.user != author:
+#                 Follow.objects.get_or_create(author=author, user=request.user)
+#                 return JsonResponse({"success": True})
+#         return JsonResponse({"success": False}, status=400)
 
-    paginator = Paginator(recipes, 10)
-    page_number = request.GET.get('page')
-    page = paginator.get_page(page_number)
-    return render(request, 'myFollow.html', {
-        'page': page,
-        'paginator': paginator
-    })
+    # def delete(self, request, username_id):
+    #     recipe = get_object_or_404(
+    #         FollowUser, following=username_id, user=request.user)
+    #     recipe.delete()
+    #     return JsonResponse({"success": True})
+
+
+def subscriptions(request):
+    print(request.body)
+    print('пост пост')
+
+    reg = json.loads(request.body)
+    user_id = reg.get("id", None)
+    author = get_object_or_404(User, id__exact=user_id)
+    if request.user != author:
+        Follow.objects.get_or_create(author=author, user=request.user)
+        return JsonResponse({"success": True})
+    # paginator = Paginator(recipes, 6)
+    # page_number = request.GET.get('page')
+    # page = paginator.get_page(page_number)
+    # return render(request, 'myFollow.html', {
+    #     # 'page': page,
+    #     # 'paginator': paginator
+    # })
 
 
 def recipe_page(request, recipe_id):
@@ -171,13 +206,16 @@ def profile(request, username):
 
 
 @login_required
+@csrf_exempt
 def profile_follow(request, username):
+    print('профиль фоллоу')
     author = get_object_or_404(User, username=username)
     if request.user != author:
         Follow.objects.get_or_create(author=author, user=request.user)
-    return redirect('profile', username=username)
+    return render(request, 'myFollow.html')
 
 
+@login_required
 def purchases(request):
     return render(request, 'shopList.html')
 

@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+APPEND_SLASH = False
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -130,3 +132,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'auth.User'
+
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/auth/login/'
