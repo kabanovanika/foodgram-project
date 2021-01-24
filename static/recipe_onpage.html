@@ -1,10 +1,11 @@
- <div class="card" data-id="120">
+ <div class="card" data-id="{{ recipe.id }}">
+     {% csrf_token %}
      {% load thumbnail %}
     {% thumbnail recipe.image  "960x339" crop="center" upscale=True as im %}
      <img  class="card__image" src="{{ im.url }}" alt="какой-то текст" />
     {% endthumbnail %}
         <div class="card__body">
-            <a class="card__title link" href="/recipe/{{recipe.id}}" target="_blank">{{ recipe.name }}</a>
+            <a class="card__title link" href="/recipe/{{recipe.id}}/" target="_blank">{{ recipe.name }}</a>
             <ul class="card__items">
                 <li class="card__item"><span class="badge badge_style_green">Обед</span></li>
                 <li class="card__item"><span class="badge badge_style_orange">Завтрак</span></li>
@@ -12,14 +13,14 @@
             </ul>
             <div class="card__items card__items_column">
                 <p class="card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
-                <p class="card__text"><span class="icon-user"></span> <a href="/{{ recipe.author }}" style="color: black">{{ recipe.author }}</a></p>
+                <p class="card__text"><span class="icon-user"></span> <a href="/{{ recipe.author }}/" style="color: black">{{ recipe.author.first_name }}</a></p>
             </div>
         </div>
         <div class="card__footer">
             <button class="button button_style_light-blue" name="purchases" data-out><span
                     class="icon-plus button__icon"></span>Добавить в покупки
             </button>
-            <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span>
+            <button class="button button_style_none" name="favorites" data-out> {% csrf_token %}<span class="icon-favorite"></span>
             </button>
         </div>
     </div>

@@ -79,34 +79,9 @@ def new_recipe(request):
                         recipe=recipe,
                     )
                 form.save_m2m()
-                return redirect('/')
+                return redirect('index')
             return redirect('/auth/login')
     return render(request, "formRecipe.html", {"form": form, })
-
-
-# @login_required
-# @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-# class Subscriptions(View):
-#     def __init__(self, request):
-#         print(self)
-#         print(request)
-#
-#     def post(self, request):
-#         print(request)
-#         reg = json.loads(request.body)
-#         user_id = reg.get("id", None)
-#         if user_id is not None:
-#             author = get_object_or_404(User, id__exact=user_id)
-#             if request.user != author:
-#                 Follow.objects.get_or_create(author=author, user=request.user)
-#                 return JsonResponse({"success": True})
-#         return JsonResponse({"success": False}, status=400)
-
-    # def delete(self, request, username_id):
-    #     recipe = get_object_or_404(
-    #         FollowUser, following=username_id, user=request.user)
-    #     recipe.delete()
-    #     return JsonResponse({"success": True})
 
 
 def subscriptions(request):
@@ -190,7 +165,7 @@ def recipe_edit(request, recipe_id):
 def profile(request, username):
     user = get_object_or_404(User, username__exact=username)
     user_id = user.id
-    user_name = user.username
+    user_name = user.first_name
     recipes = Recipe.objects.filter(author=user_id)
     paginator = Paginator(recipes, 6)
     image = Recipe.image
@@ -209,11 +184,11 @@ def profile(request, username):
 def profile_follow(request):
     following = Follow.objects.filter(user=request.user).values('author')
     recipes = Recipe.objects.filter(author__in=following)
-
     paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, 'myfollow.html', {
+    return render(request, 'myFollow.html', {
+        'following': following,
         'recipes': recipes,
         'page': page,
         'paginator': paginator
@@ -225,5 +200,18 @@ def purchases(request):
     return render(request, 'shopList.html')
 
 
-def favorites(request):
-    return render(request, 'favorite.html')
+def favorites(request, recipe_id=None):
+    print(request.body)
+    print('пост пост')
+
+    reg = json.loads(request.body)
+    user_id = reg.get("id", None)
+    print(user_id)
+    # author = get_object_or_404(User, id__exact=user_id)
+    # if request.user != author:
+    #     Follow.objects.get_or_create(author=author, user=request.user)
+    return JsonResponse({"success": True})
+
+
+def favorite_recipes(request):
+    return render(request, "favorite.html")

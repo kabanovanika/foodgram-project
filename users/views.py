@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
+from django.views.generic import CreateView
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.urls import reverse_lazy
 from .forms import SignUpForm, PasswordChangingForm, PasswordsResetForm
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
 
 
 def logout_view(request):
@@ -36,30 +38,13 @@ def view_login(request):
         if user is not None:
             login(request, user)
             return redirect('/home')
-        else:
-            return redirect('/auth/signup')
+
     return render(request, 'authForm.html')
 
 
-def signup_view(request):
-    form = SignUpForm(request.POST)
-    print('валидна?')
-    print(form.errors)
-    if form.is_valid():
-        print('валидна')
-        user = form.save()
-        user.refresh_from_db()
-        print(form.cleaned_data)
-        user.name = form.cleaned_data.get('name')
-        user.email = form.cleaned_data.get('email')
-        user.save()
-        print(user.name)
-        username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password1')
-        name = form.cleaned_data.get('name')
-        user = authenticate(username=username, password=password, name=name)
-        login(request, user)
-        return redirect('/home')
-    else:
-        form = SignUpForm()
-    return render(request, 'reg.html', {'form': form})
+class SignUp(CreateView):
+    form_class = SignUpForm
+    success_url = reverse_lazy('login')
+    template_name = 'reg.html'
+
+

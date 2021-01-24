@@ -19,7 +19,7 @@
             </ul>
             <ul class="nav__items list">
                 <li class="nav__item"><a href="/auth/login" class="nav__link link">Войти</a></li>
-                <li class="nav__item"><a href="/auth/signup" class="button button_style_blue">Создать аккаунт</a></li>
+                <li class="nav__item"><a href="/auth/signup/" class="button button_style_blue">Создать аккаунт</a></li>
             </ul>
         </div>
     </nav>
@@ -39,7 +39,7 @@
                 </ul>
                 <div class="single-card__items single-card__items_column">
                     <p class="single-card__text"><span class="icon-time"></span> {{ cooking_time }} мин.</p>
-                    <p class="single-card__text"><span class="icon-user"></span> {{ author }}</p>
+                    <p class="single-card__text"><span class="icon-user"></span> {{ author.first_name }}</p>
                 </div>
                 <ul class="single-card__items">
                     <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>

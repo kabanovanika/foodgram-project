@@ -7,26 +7,29 @@ from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 
 
 class SignUpForm(UserCreationForm):
-    name = forms.CharField(max_length=100, help_text='First Name', label='Имя пользователя',
-                           widget=forms.TextInput(attrs={'class': 'form__input', 'type': 'text'}))
-    email = forms.EmailField(max_length=150, help_text='Email', label='Адрес электронной почты',
-                             widget=forms.EmailInput(attrs={'class': 'form__input', 'type': 'email'}))
+    first_name = forms.CharField(max_length=100, label='Имя')
+    username = forms.CharField(max_length=100, help_text='Имя для входа в систему', label='Имя пользователя')
+    email = forms.EmailField(max_length=150, label='Адрес электронной почты')
     password1 = forms.CharField(max_length=100,
+                                label='Пароль',
                                 widget=forms.PasswordInput(
                                     attrs={'placeholder': '********', 'class': 'form__input', 'type': 'password',
                                            'data-toggle': 'password'}),
-                                label='Пароль',
-                                help_text=password_validation.password_validators_help_text_html())
+                                help_text='Ваш пароль должен содержать не менее 8 символов.' \
+                                          'Ваш пароль не должен совпадать с логином.')
     password2 = None
 
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = User
-        exclude = ('last_name',)
-        fields = ('username', 'name',
-                  'email', 'password1',)
-        labels = {
-            'username': _('Имя'),
-        }
+        fields = ('first_name', 'username', 'email')
+        exclude = ('last_name', 'password2',)
+
+
+# class LoginForm(forms.Form):
+#     class Meta:
+#         model = User
+#         fields = ('username', 'password')
+#         error_messages = {'username': 'Имя пользователя и пароль не совпадают. Введите правильные данные.'}
 
 
 class PasswordChangingForm(PasswordChangeForm):
