@@ -33,7 +33,7 @@ class Recipe(models.Model):
         through='RecipeIngredient',
         through_fields=('recipe', 'ingredient')
     )
-    tag = models.ManyToManyField(Tag, related_name="recipes")
+    tags = models.ManyToManyField(Tag, related_name="recipes")
     cooking_time = models.IntegerField(default=0)
     pub_date = models.DateTimeField("date published", auto_now_add=True)
 

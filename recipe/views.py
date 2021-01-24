@@ -6,7 +6,7 @@ from django.views import View
 from rest_framework import viewsets
 
 from .forms import RecipeForm
-from .models import Recipe, Ingredient, RecipeIngredient, User, Follow
+from .models import Recipe, Ingredient, RecipeIngredient, User, Follow, Tag
 from rest_framework.decorators import api_view, renderer_classes
 from django.contrib.auth.decorators import login_required
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
@@ -67,10 +67,15 @@ def new_recipe(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     if request.method == 'POST':
         ingredients = get_ingredients_for_recipe_form(request.POST)
+
         if form.is_valid():
             if request.user.is_authenticated:
                 recipe = form.save(commit=False)
                 recipe.author = request.user
+                # form_dict = request.POST
+                # for tag in tags:
+                #     if tag in form_dict:
+                #         recipe.tags = form_dict[tag]
                 recipe.save()
                 for (item, amount) in ingredients:
                     RecipeIngredient.objects.create(
