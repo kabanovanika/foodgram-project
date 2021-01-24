@@ -15,7 +15,6 @@
         <div class="nav__container container">
             <ul class="nav__items list">
                 <li class="nav__item nav__item_active"><a href="/home" class="nav__link link">Рецепты</a></li>
-                <li class="nav__item"><a href="/purchases" class="nav__link link">Список покупок</a><span class="badge badge_style_blue nav__badge" id="counter">4</span></li>
             </ul>
             <ul class="nav__items list">
                 <li class="nav__item"><a href="/auth/login" class="nav__link link">Войти</a></li>
@@ -41,9 +40,6 @@
                     <p class="single-card__text"><span class="icon-time"></span> {{ cooking_time }} мин.</p>
                     <p class="single-card__text"><span class="icon-user"></span> {{ author.first_name }}</p>
                 </div>
-                <ul class="single-card__items">
-                    <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
-                </ul>
                 <div class="single-card__section">
                     <h3 class="single-card__section-title">Ингредиенты:</h3>
                     <div class="single-card__items single-card__items_column">

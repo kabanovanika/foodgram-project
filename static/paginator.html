@@ -15,7 +15,7 @@
         {% if items.has_previous %}
         <li class="pagination__item"><a class="pagination__link link" href="?page={{ items.previous_page_number }}"><span class="icon-left"></span></a></li>
         {% else %}
-        <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-left"></span></a></li>
+        <li class="pagination__item"><a class="pagination__link link" href="#"g><span class="icon-left"></span></a></li>
         {% endif %}
         {% for i in paginator.page_range %}
             {% if items.number == i %}

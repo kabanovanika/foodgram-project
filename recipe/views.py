@@ -171,12 +171,20 @@ def profile(request, username):
     image = Recipe.image
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request, "authorRecipe.html", {
-        'page': page,
-        'paginator': paginator,
-        'image': image,
-        'name': user_name,
-    })
+    if request.user.is_authenticated:
+        return render(request, "authorRecipe.html", {
+            'page': page,
+            'paginator': paginator,
+            'image': image,
+            'name': user_name,
+        })
+    else:
+        return render(request, "authorRecipeNotAuth.html", {
+            'page': page,
+            'paginator': paginator,
+            'image': image,
+            'name': user_name,
+        })
 
 
 @login_required
