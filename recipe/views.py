@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.views import View
 from rest_framework import viewsets
-
+from django import template
 from .forms import RecipeForm
 from .models import Recipe, Ingredient, RecipeIngredient, User, Follow, Tag
 from rest_framework.decorators import api_view, renderer_classes
@@ -47,18 +47,28 @@ def index(request):
     paginator = Paginator(recipes, 6)
     image = Recipe.image
     page_number = request.GET.get('page')
+    breakfast = request.GET.get('breakfast')
+    lunch = request.GET.get('lunch')
+    dinner = request.GET.get('dinner')
     page = paginator.get_page(page_number)
+
     if request.user.is_authenticated:
         return render(request, 'indexAuth.html', {
             'page': page,
             'paginator': paginator,
             'image': image,
+            'breakfast': breakfast,
+            'lunch': lunch,
+            'dinner': dinner,
         })
     else:
         return render(request, 'indexNotAuth.html', {
             'page': page,
             'paginator': paginator,
             'image': image,
+            'breakfast': breakfast,
+            'lunch': lunch,
+            'dinner': dinner,
         })
 
 

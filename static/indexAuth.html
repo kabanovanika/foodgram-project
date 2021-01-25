@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+{% load user_filters %}
 {% csrf_token %}
 <head>
     <meta charset="UTF-8">
@@ -35,16 +36,31 @@
             <h1 class="main__title">Рецепты</h1>
             <ul class="tags">
                 <li class="tags__item">
-                    <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="#"></a>
+                    {% if breakfast == 'off' %}
+                    <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange" href="?{% query_transform request %}&breakfast=on"></a>
                     <span class="tags__label">Завтрак</span>
+                    {% else %}
+                    <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="?{% query_transform request %}&breakfast=off"></a>
+                    <span class="tags__label">Завтрак</span>
+                    {% endif%}
                 </li>
                 <li class="tags__item">
-                    <a id="lunch" class="tags__checkbox tags__checkbox_style_green tags__checkbox_active" href="#"></a>
+                    {% if lunch == 'off' %}
+                    <a id="lunch" class="tags__checkbox tags__checkbox_style_green" href="?{% query_transform request %}&lunch=on"></a>
                     <span for="lunch" class="tags__label">Обед</span>
+                    {% else %}
+                    <a id="lunch" class="tags__checkbox tags__checkbox_style_green tags__checkbox_active" href="?{% query_transform request %}&lunch=off"></a>
+                    <span for="lunch" class="tags__label">Обед</span>
+                    {% endif%}
                 </li>
                 <li class="tags__item">
-                    <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="#"></a>
+                    {% if dinner == 'off' %}
+                    <a id="dinner" class="tags__checkbox tags__checkbox_style_purple" href="?dinner=on"></a>
                     <label for="dinner" class="tags__label">Ужин</label>
+                    {% else %}
+                    <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="?dinner=off"></a>
+                    <label for="dinner" class="tags__label">Ужин</label>
+                    {% endif%}
                 </li>
             </ul>
         </div>
