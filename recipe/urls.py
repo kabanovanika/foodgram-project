@@ -12,7 +12,7 @@ urlpatterns = (
     path("home", views.index, name="index"),
     path('favorites', views.Favorites.as_view(), name='favorites'),
     path('favorites/<int:recipe_id>', views.Favorites.as_view(), name='favorites'),
-    path('favorite-recipes', views.favorite_recipes ),
+    path('favorite-recipes', views.favorite_recipes, name='favorite_recipes'),
     path("ingredients", views.get_ingredients),
     path("new", views.new_recipe, name='formRecipe'),
     path("purchases", views.purchases, name="purchases"),

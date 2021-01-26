@@ -256,18 +256,16 @@ class Favorites(LoginRequiredMixin, View):
         return JsonResponse({"success": True})
 
 
-# def favorites(request, recipe_id=None):
-#     print(request.body)
-#     print('пост пост')
-#
-#     reg = json.loads(request.body)
-#     user_id = reg.get("id", None)
-#     print(user_id)
-#     # author = get_object_or_404(User, id__exact=user_id)
-#     # if request.user != author:
-#     #     Follow.objects.get_or_create(author=author, user=request.user)
-#     return JsonResponse({"success": True})
-
-
 def favorite_recipes(request):
-    return render(request, "favorite.html")
+    recipes_id = Favorite.objects.values_list('favorite_recipe_id', flat=True).filter(user__exact=request.user)
+    recipes = Recipe.objects.filter(id__in=recipes_id)
+    image = Recipe.image
+    paginator = Paginator(recipes, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, "favorite.html", {
+        'recipes': recipes,
+        'page': page,
+        'paginator': paginator,
+        'image': image
+    })
