@@ -1,10 +1,7 @@
 import json
 
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.views import View
-from rest_framework import viewsets
-from django import template
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import RecipeForm
 from .models import Recipe, Ingredient, RecipeIngredient, User, Follow, Tag
 from rest_framework.decorators import api_view, renderer_classes
@@ -43,13 +40,19 @@ def get_ingredients_for_recipe_form(query_data):
 
 
 def index(request):
-    recipes = Recipe.objects.all()
-    paginator = Paginator(recipes, 6)
     image = Recipe.image
+    filters = ['breakfast', 'lunch', 'dinner']
+    filter_values = []
+    for f in filters:
+        if request.GET.get(f) == 'off':
+            filter_values.append(f)
+    if filter_values:  # нужно что-то сделать с рецептами под разными тегами и при переходе на страницы другие тоже
+        tags = Tag.objects.filter(slug__in=filter_values)
+        recipes = Recipe.objects.exclude(tags__in=tags)
+    else:
+        recipes = Recipe.objects.all()
+    paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
-    breakfast = request.GET.get('breakfast')
-    lunch = request.GET.get('lunch')
-    dinner = request.GET.get('dinner')
     page = paginator.get_page(page_number)
 
     if request.user.is_authenticated:
@@ -57,18 +60,12 @@ def index(request):
             'page': page,
             'paginator': paginator,
             'image': image,
-            'breakfast': breakfast,
-            'lunch': lunch,
-            'dinner': dinner,
         })
     else:
         return render(request, 'indexNotAuth.html', {
             'page': page,
             'paginator': paginator,
             'image': image,
-            'breakfast': breakfast,
-            'lunch': lunch,
-            'dinner': dinner,
         })
 
 
@@ -82,10 +79,6 @@ def new_recipe(request):
             if request.user.is_authenticated:
                 recipe = form.save(commit=False)
                 recipe.author = request.user
-                # form_dict = request.POST
-                # for tag in tags:
-                #     if tag in form_dict:
-                #         recipe.tags = form_dict[tag]
                 recipe.save()
                 for (item, amount) in ingredients:
                     RecipeIngredient.objects.create(

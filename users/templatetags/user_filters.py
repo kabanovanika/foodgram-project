@@ -10,14 +10,10 @@ def addclass(field, css):
 
 @register.simple_tag
 def query_transform(request, **kwargs):
-    print('я сюда зашел')
     updated = request.GET.copy()
-    print(updated)
     for k, v in kwargs.items():
-        print(k, v)
         if v is not None:
             updated[k] = v
-            print(f'новый урл {updated.urlencode()}')
         else:
-            updated.pop(k, 0)  # Remove or return 0 - aka, delete safely this key
+            updated.pop(k, 0)
     return updated.urlencode()
