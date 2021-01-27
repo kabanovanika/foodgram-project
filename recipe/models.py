@@ -83,3 +83,12 @@ class Favorite(models.Model):
 
     class Meta:
         ordering = ['-id']
+
+
+class ShoppingList(models.Model):
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE,
+                             related_name="purchases_user")
+    purchase_recipe = models.ForeignKey(Recipe,
+                                        on_delete=models.CASCADE,
+                                        related_name="purchases")

@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="card__footer">
-            <button class="button button_style_light-blue" name="purchases" data-out><span
+            <button class="button button_style_light-blue" name="purchases" data-out>{% csrf_token %}<span
                     class="icon-plus button__icon"></span>Добавить в покупки
             </button>
             <button class="button button_style_none" name="favorites" data-out> {% csrf_token %}<span class="icon-favorite"></span>
