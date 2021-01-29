@@ -4,6 +4,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
+
+from . import domain
+from .domain.user import DomainUser
 from .forms import RecipeForm
 from .models import Recipe, Ingredient, RecipeIngredient, Favorite, User, Follow, Tag, ShoppingList
 from rest_framework.decorators import api_view, renderer_classes
@@ -66,15 +69,11 @@ def get_ingredients_for_recipe_form(query_data):
 def index(request):
     image = Recipe.image
     filters = ['breakfast', 'lunch', 'dinner']
-    filter_values = []
-    for f in filters:
-        if request.GET.get(f) == 'off':
-            filter_values.append(f)
-    if filter_values:  # нужно что-то сделать с рецептами под разными тегами
-        tags = Tag.objects.filter(slug__in=filter_values)
-        recipes = Recipe.objects.exclude(tags__in=tags)
-    else:
-        recipes = Recipe.objects.all()
+    filter_values = [f for f in filters if request.GET.get(f) == 'off']
+    tags = []
+    if filter_values:
+        tags = Tag.objects.exclude(slug__in=filter_values)
+    recipes = domain.get_recipes_with_tags(tags)
     paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -219,15 +218,11 @@ def profile(request, username):
     user_id = user.id
     user_name = user.first_name
     filters = ['breakfast', 'lunch', 'dinner']
-    filter_values = []
-    for f in filters:
-        if request.GET.get(f) == 'off':
-            filter_values.append(f)
-    if filter_values:  # нужно что-то сделать с рецептами под разными тегами
-        tags = Tag.objects.filter(slug__in=filter_values)
-        recipes = Recipe.objects.filter(author=user_id).exclude(tags__in=tags)
-    else:
-        recipes = Recipe.objects.filter(author=user_id)
+    filter_values = [f for f in filters if request.GET.get(f) == 'off']
+    tags = []
+    if filter_values:
+        tags = Tag.objects.exclude(slug__in=filter_values)
+    recipes = domain.get_recipes_with_tags(tags, author_id=user_id)
     paginator = Paginator(recipes, 6)
     image = Recipe.image
     page_number = request.GET.get('page')
@@ -260,15 +255,17 @@ def profile(request, username):
 @login_required
 @csrf_exempt
 def profile_follow(request):
-    following = Follow.objects.filter(user=request.user).values('author')
-    recipes = Recipe.objects.filter(author__in=following)
-    paginator = Paginator(recipes, 6)
+    authors = [f.author for f in Follow.objects.filter(user=request.user).all()]
+    recipes_from_author_id = {a.id: Recipe.objects.filter(author__exact=a)[:3] for a in authors}
+    recipe_count_from_author_id = {a.id: Recipe.objects.filter(author__exact=a).count() - 3 for a in authors}
+    paginator = Paginator(authors, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     counter = amount_purchases(request)
     return render(request, 'myFollow.html', {
-        'following': following,
-        'recipes': recipes,
+        'authors': authors,
+        'recipes_from_author_id': recipes_from_author_id,
+        'recipe_count_from_author_id': recipe_count_from_author_id,
         'page': page,
         'paginator': paginator,
         'counter': counter,
@@ -350,29 +347,25 @@ class Favorites(LoginRequiredMixin, View):
 
 def favorite_recipes(request):
     counter = amount_purchases(request)
-    recipes_id = Favorite.objects.values_list('favorite_recipe_id', flat=True).filter(user__exact=request.user)
+    domain_user = DomainUser(request.user.id)
+    favorite_recipe_ids = domain_user.favorites()
     filters = ['breakfast', 'lunch', 'dinner']
-    filter_values = []
-    for f in filters:
-        if request.GET.get(f) == 'off':
-            filter_values.append(f)
-    if filter_values:  # нужно что-то сделать с рецептами под разными тегами
-        tags = Tag.objects.filter(slug__in=filter_values)
-        recipes = Recipe.objects.filter(id__in=recipes_id).exclude(tags__in=tags)
-    else:
-        recipes = Recipe.objects.filter(id__in=recipes_id)
+    filter_values = [f for f in filters if request.GET.get(f) == 'off']
+    tags = []
+    if filter_values:
+        tags = Tag.objects.exclude(slug__in=filter_values)
+    recipes = domain.get_recipes_with_tags(tags, recipe_id_seq=favorite_recipe_ids)
     image = Recipe.image
     paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    in_shop_list = ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user_id=request.user)
-    in_favorite = Favorite.objects.values_list('favorite_recipe_id', flat=True).filter(user_id=request.user)
+    in_shop_list = domain_user.shopping_list()
     return render(request, "favorite.html", {
         'recipes': recipes,
         'page': page,
         'paginator': paginator,
         'image': image,
         'in_shop_list': in_shop_list,
-        'in_favorite': in_favorite,
+        'in_favorite': favorite_recipe_ids,
         'counter': counter,
     })

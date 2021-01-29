@@ -2,6 +2,7 @@
 <html lang="en">
 {% csrf_token %}
 {% load thumbnail %}
+{% load user_filters %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -34,16 +35,15 @@
     <div class="main__header">
         <h1 class="main__title">Мои подписки</h1>
     </div>
-    {% for follower in following %}
-    {% for recipe in recipes %}
-    {% if recipe.author.id == follower.author %}
     <div class="card-list">
-        <div class="card-user" data-author={{ recipe.author.id }}>
+    {% for author in authors %}
+        <div class="card-user" data-author={{ author.id }}>
         <div class="card-user__header">
-            <h2 class="card-user__title">{{ recipe.author.first_name }}</h2>
+            <h2 class="card-user__title">{{ author.first_name }}</h2>
         </div>
         <div class="card-user__body">
             <ul class="card-user__items">
+                {% for recipe in recipes_from_author_id|lookup:author.id %}
                 <li class="card-user__item">
                     <div class="recipe">
                         {% thumbnail recipe.image  "350x339" crop="center" upscale=True as im %}
@@ -53,21 +53,22 @@
                         <p class="recipe__text"><span class="icon-time"></span> {{recipe.cooking_time }} минут</p>
                     </div>
                 </li>
-
+                {% endfor %}
+                {% if recipe_count_from_author_id|lookup:author.id > 0 %}
                 <li class="card-user__item">
-                    <a href="/{{ recipe.author }}/" class="card-user__link link">Еще рецепты...</a>
+                    <a href="/{{ author }}/" class="card-user__link link">Еще рецептов: {{ recipe_count_from_author_id|lookup:author.id }}</a>
                 </li>
+                {% endif %}
+
             </ul>
         </div>
 
         <div class="card-user__footer">
             <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
         </div>
-        {% endif %}
         </div>
+    {% endfor %}
     </div>
-    {% endfor %}
-    {% endfor %}
 
     {% if page.has_other_pages %}
             {% include "paginator.html" with items=page paginator=paginator %}

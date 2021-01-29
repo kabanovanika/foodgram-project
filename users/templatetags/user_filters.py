@@ -17,3 +17,8 @@ def query_transform(request, **kwargs):
         else:
             updated.pop(k, 0)
     return updated.urlencode()
+
+
+@register.filter
+def lookup(dictionary, key):
+    return dictionary.get(key)
