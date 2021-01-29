@@ -1,11 +1,7 @@
 from django.urls import path
 from . import views
-# from .views import Subscription
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = (
-    # path('subscriptions', views.subscriptions, name='my_follow'),
     path('subscriptions', views.Subscriptions.as_view(), name='my_follow'),
     path('subscriptions/<int:author>', views.Subscriptions.as_view(), name='my_follow_delete'),
     path("follow", views.profile_follow, name="profile_follow"),

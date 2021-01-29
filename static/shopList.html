@@ -44,7 +44,7 @@
                     <h3 class="recipe__title">{{ recipe.name}}</h3>
                     <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time}} мин.</p>
                 </div>
-                <a href="#" class="shopping-list__button link">Удалить</a>
+                <button methods="POST" class="shopping-list__button link">Удалить</button>
             </li>
             {% endfor %}
         <a href="/download"><button type=submit class="button button_style_blue">Скачать список</button></a>

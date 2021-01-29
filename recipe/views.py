@@ -29,8 +29,10 @@ def server_error(request):
 
 def amount_purchases(request):
     counter = ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user_id=request.user)
-
-    return len(counter)
+    amount = len(counter)
+    if amount == 0:
+        amount = ''
+    return amount
 
 
 @api_view(('GET',))
@@ -62,7 +64,6 @@ def get_ingredients_for_recipe_form(query_data):
 
 
 def index(request):
-    counter = amount_purchases(request)
     image = Recipe.image
     filters = ['breakfast', 'lunch', 'dinner']
     filter_values = []
@@ -77,9 +78,10 @@ def index(request):
     paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    in_shop_list = ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user_id=request.user)
-    in_favorite = Favorite.objects.values_list('favorite_recipe_id', flat=True).filter(user_id=request.user)
     if request.user.is_authenticated:
+        in_shop_list = ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user_id=request.user)
+        in_favorite = Favorite.objects.values_list('favorite_recipe_id', flat=True).filter(user_id=request.user)
+        counter = amount_purchases(request)
         return render(request, 'indexAuth.html', {
             'page': page,
             'paginator': paginator,
@@ -141,7 +143,6 @@ class Subscriptions(LoginRequiredMixin, View):
 
 
 def recipe_page(request, recipe_id):
-    counter = amount_purchases(request)
     recipe = get_object_or_404(Recipe,
                                id__exact=recipe_id)
     image = recipe.image
@@ -149,12 +150,13 @@ def recipe_page(request, recipe_id):
     cooking_time = recipe.cooking_time
     ingredients = RecipeIngredient.objects.filter(recipe_id=recipe_id)
     description = recipe.text
-    is_favorite = Favorite.objects.filter(user_id__exact=request.user,
-                                          favorite_recipe_id__exact=recipe.id).exists()
-    in_shop_list = ShoppingList.objects.filter(user_id__exact=request.user,
-                                               purchase_recipe_id__exact=recipe.id).exists()
-    following = Follow.objects.filter(user_id__exact=request.user, author_id__exact=author).exists()
     if request.user.is_authenticated:
+        is_favorite = Favorite.objects.filter(user_id__exact=request.user,
+                                              favorite_recipe_id__exact=recipe.id).exists()
+        in_shop_list = ShoppingList.objects.filter(user_id__exact=request.user,
+                                                   purchase_recipe_id__exact=recipe.id).exists()
+        following = Follow.objects.filter(user_id__exact=request.user, author_id__exact=author).exists()
+        counter = amount_purchases(request)
         return render(request, "singlePage.html", {
             "recipe": recipe,
             "author": author,
@@ -293,6 +295,8 @@ def purchases_list(request):
     recipes = Recipe.objects.filter(id__in=recipes_id)
     image = Recipe.image
     counter = len(recipes)
+    if request.method == 'DELETE':
+        ShoppingList.objects.get(user_id=request.user, purchase_recipe=recipe_id).delete()
     return render(request, "shopList.html", {
         'recipes': recipes,
         'image': image,
