@@ -66,10 +66,12 @@
                     <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
                     {% endif %}
 
+                    {% if request.user != author %}
                     {% if following %}
-                    <li class="single-card__item"><button class="button button_style_light-blue" name="subscribe">Отписаться на автора</button></li>
+                    <li class="single-card__item"><button class="button button_style_light-blue" name="subscribe">Отписаться от автора</button></li>
                     {% else %}
                     <li class="single-card__item"><button class="button button_style_light-blue" name="subscribe" data-out>Подписаться на автора</button></li>
+                    {% endif %}
                     {% endif %}
                 </ul>
                 <div class="single-card__section">

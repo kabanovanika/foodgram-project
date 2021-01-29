@@ -34,12 +34,12 @@
             <h1 class="main__title">{{ name }}</h1>
              {% include "tags.html" %}
         </div>
-        {% if request.user != user %}
+        {% if request.user.id != user_id %}
         <div class="author-subscribe" data-author="{{ user_id }}">
         {% if following %}
-            <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" name="subscribe">Отписаться от автора</a></p>
+          <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue" name="subscribe">Отписаться от автора</button></p>
         {% else %}
-            <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" name="subscribe" data-out>Подписаться на автора</a></p>
+            <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue" name="subscribe" data-out >Подписаться на автора</button></p>
             {% endif %}
         </div>
         {% endif %}

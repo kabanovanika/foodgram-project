@@ -191,6 +191,9 @@ def recipe_edit(request, recipe_id):
         request.POST or None, files=request.FILES or None, instance=recipe
     )
     if request.method == "POST":
+        if request.POST.get('delete') == '':
+            recipe.delete()
+            return redirect('index')
         ingredients = get_ingredients_for_recipe_form(request.POST)
         if form.is_valid():
             RecipeIngredient.objects.filter(recipe=recipe).delete()
@@ -204,7 +207,7 @@ def recipe_edit(request, recipe_id):
                     recipe=recipe,
                 )
             form.save_m2m()
-        return redirect("/")
+        return redirect('index')
 
     return render(
         request, "formChangeRecipe.html", {"form": form, "recipe": recipe, "recipe_id": recipe_id, },
@@ -235,6 +238,7 @@ def profile(request, username):
         in_favorite = Favorite.objects.values_list('favorite_recipe_id', flat=True).filter(user_id=request.user)
         counter = amount_purchases(request)
         return render(request, "authorRecipe.html", {
+            'user_id': user_id,
             'page': page,
             'paginator': paginator,
             'image': image,

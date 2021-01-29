@@ -1,8 +1,18 @@
 from django import forms
+from django.forms import ImageField
+
 from .models import Recipe, RecipeIngredient, Ingredient, Tag
+from django.forms.widgets import ClearableFileInput
+
+
+class MyClearableFileInput(ClearableFileInput):
+    initial_text = 'Текущее фото'
+    input_text = 'Изменить'
 
 
 class RecipeForm(forms.ModelForm):
+    image = ImageField(required=True, widget=MyClearableFileInput)
+
     def __init__(self, data=None, *args, **kwargs):
         if data is not None:
             data = data.copy()
