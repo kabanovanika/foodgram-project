@@ -14,6 +14,19 @@ from django.http import JsonResponse, HttpResponse
 from collections import defaultdict
 
 
+def page_not_found(request, exception):
+    return render(
+        request,
+        "misc/404.html",
+        {"path": request.path},
+        status=404
+    )
+
+
+def server_error(request):
+    return render(request, "misc/500.html", status=500)
+
+
 def amount_purchases(request):
     counter = ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user_id=request.user)
 
