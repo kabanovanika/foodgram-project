@@ -229,11 +229,11 @@ def profile(request, username):
     image = Recipe.image
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    following = Follow.objects.filter(user_id__exact=request.user, author_id__exact=user_id).exists()
-    in_shop_list = ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user_id=request.user)
-    in_favorite = Favorite.objects.values_list('favorite_recipe_id', flat=True).filter(user_id=request.user)
-    counter = amount_purchases(request)
     if request.user.is_authenticated:
+        following = Follow.objects.filter(user_id__exact=request.user, author_id__exact=user_id).exists()
+        in_shop_list = ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user_id=request.user)
+        in_favorite = Favorite.objects.values_list('favorite_recipe_id', flat=True).filter(user_id=request.user)
+        counter = amount_purchases(request)
         return render(request, "authorRecipe.html", {
             'page': page,
             'paginator': paginator,
@@ -294,9 +294,7 @@ def purchases_list(request):
     recipes_id = ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user__exact=request.user)
     recipes = Recipe.objects.filter(id__in=recipes_id)
     image = Recipe.image
-    counter = len(recipes)
-    if request.method == 'DELETE':
-        ShoppingList.objects.get(user_id=request.user, purchase_recipe=recipe_id).delete()
+    counter = amount_purchases(request)
     return render(request, "shopList.html", {
         'recipes': recipes,
         'image': image,
