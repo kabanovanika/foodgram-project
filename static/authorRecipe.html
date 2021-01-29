@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+{% load user_filters %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -18,7 +19,7 @@
                   <li class="nav__item"><a href="/follow" class="nav__link link">Мои подписки</a></li>
                   <li class="nav__item"><a href="/new" class="nav__link link">Создать рецепт</a></li>
                   <li class="nav__item"><a href="/favorite-recipes" class="nav__link link">Избранное</a></li>
-                  <li class="nav__item"><a href="/purchases-list" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter">4</span></li>
+                  <li class="nav__item"><a href="/purchases-list" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter">{{ counter }}</span></li>
 
               </ul>
               <ul class="nav__items list">
@@ -33,24 +34,49 @@
             <h1 class="main__title">{{ name }}</h1>
             <ul class="tags">
                 <li class="tags__item">
-                    <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="#"></a>
+                    {% if 'breakfast=off' in request.get_full_path %}
+                    <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange" href="?{% query_transform request breakfast=None %}"></a>
                     <span class="tags__label">Завтрак</span>
+                    {% else %}
+                    <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="?{% query_transform request breakfast='off'%}"></a>
+                    <span class="tags__label">Завтрак</span>
+                    {% endif%}
                 </li>
                 <li class="tags__item">
-                    <a id="lunch" class="tags__checkbox tags__checkbox_style_green tags__checkbox_active" href="#"></a>
+                    {% if 'lunch=off' in request.get_full_path %}
+                    <a id="lunch" class="tags__checkbox tags__checkbox_style_green" href="?{% query_transform request lunch=None %}"></a>
                     <span for="lunch" class="tags__label">Обед</span>
+                    {% else %}
+                    <a id="lunch" class="tags__checkbox tags__checkbox_style_green tags__checkbox_active" href="?{% query_transform request lunch='off' %}"></a>
+                    <span for="lunch" class="tags__label">Обед</span>
+                    {% endif%}
                 </li>
                 <li class="tags__item">
-                    <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="#"></a>
+                    {% if 'dinner=off' in request.get_full_path %}
+                    <a id="dinner" class="tags__checkbox tags__checkbox_style_purple" href="?{% query_transform request dinner=None %}"></a>
                     <label for="dinner" class="tags__label">Ужин</label>
+                    {% else %}
+                    <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="?{% query_transform request dinner='off' %}"></a>
+                    <label for="dinner" class="tags__label">Ужин</label>
+                    {% endif%}
                 </li>
             </ul>
-
         </div>
+        {% if request.user != user %}
+        <div class="author-subscribe" data-author="{{ user_id }}">
+        {% if following %}
+            <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" name="subscribe">Отписаться от автора</a></p>
+        {% else %}
+            <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" name="subscribe" data-out>Подписаться на автора</a></p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+
         <div class="card-list">
 
             {% for recipe in page %}
-                {% include "recipe_onpage.html" with recipe=recipe %}
+                {% include "recipe_onpage.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite %}
             {% endfor %}
 
         </div>

@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.views.generic import CreateView
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.urls import reverse_lazy
 from .forms import SignUpForm, PasswordChangingForm, PasswordsResetForm
 from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_exempt
+
 
 
 def logout_view(request):
@@ -27,7 +27,7 @@ def password_success(request):
 
 
 def reset_success(request):
-    return render(request, 'reset_success.html')
+    return render(request, 'password_reset_done.html')
 
 
 def view_login(request):

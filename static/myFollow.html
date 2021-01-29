@@ -40,7 +40,7 @@
     <div class="card-list">
         <div class="card-user" data-author={{ recipe.author.id }}>
         <div class="card-user__header">
-            <h2 class="card-user__title">{{ recipe.author}}</h2>
+            <h2 class="card-user__title">{{ recipe.author.first_name }}</h2>
         </div>
         <div class="card-user__body">
             <ul class="card-user__items">
@@ -49,14 +49,13 @@
                         {% thumbnail recipe.image  "350x339" crop="center" upscale=True as im %}
                          <img  class="recipe__image" src="{{ im.url }}" alt="какой-то текст" />
                         {% endthumbnail %}
-<!--                        <img src="static/images/testCardImg.png" alt="какой-то-текст" class="recipe__image">-->
                         <h3 class="recipe__title">{{ recipe.name }}</h3>
                         <p class="recipe__text"><span class="icon-time"></span> {{recipe.cooking_time }} минут</p>
                     </div>
                 </li>
 
                 <li class="card-user__item">
-                    <a href="/{{ recipe.author }}" class="card-user__link link">Еще рецепты...</a>
+                    <a href="/{{ recipe.author }}/" class="card-user__link link">Еще рецепты...</a>
                 </li>
             </ul>
         </div>

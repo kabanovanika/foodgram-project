@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 </head>
 <body class="body">
-  <header class="header">
+      <header class="header">
       <nav class="nav">
           <div class="nav__container container">
               <ul class="nav__items list">
@@ -70,7 +70,7 @@
         <div class="card-list">
 
             {% for recipe in page %}
-                {% include "recipe_onpage.html" with recipe=recipe %}
+                {% include "recipe_onpage.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite %}
             {% endfor %}
 
         </div>

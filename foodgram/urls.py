@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from recipe import views
 
 urlpatterns = [
+    path('', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path("auth/", include("users.urls")),
     path("", include("recipe.urls")),
