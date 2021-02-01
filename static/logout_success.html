@@ -27,20 +27,12 @@
     <div class="custom-center-block">
             <p class="custom-text-block">Вы успешно вышли из системы!</p>
         <div class="custom-button-block">
-            <button href="/" type=submit class="button button_style_blue">Перейти на главную</button>
+            <button type=submit class="button button_style_blue"><a href="{% url 'index' %}" class="nav__link link" >Перейти на главную</a></button>
         </div>
     </div>
 
 
 </main>
-<footer class="footer">
-    <div class="footer__container container">
-        <a href="#" class="footer__brand link">Продуктовый помощник</a>
-        <ul class="footer__items">
-            <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
-            <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
-        </ul>
-    </div>
-</footer>
+{% include "footer.html" %}
 </body>
 </html>

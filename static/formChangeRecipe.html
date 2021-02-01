@@ -23,7 +23,7 @@
 
             </ul>
             <ul class="nav__items list">
-               <li class="nav__item"><a href="auth/password-change" class="nav__link link">Изменить пароль</a></li>
+               <li class="nav__item"><a href="auth/password-change/" class="nav__link link">Изменить пароль</a></li>
                 <li class="nav__item"><a href="{% url 'logout'%}" class="nav__link link">Выход</a></li>
             </ul>
         </div>
@@ -57,11 +57,11 @@
                             <label for="id_breakfast" class="tags__label">Завтрак</label>
                         </div>
                         <div class="tags__item">
-                            <input type="checkbox" name="lunch" id="id_lunch" class="tags__checkbox tags__checkbox_style_green" checked>
+                            <input type="checkbox" name="lunch" id="id_lunch" class="tags__checkbox tags__checkbox_style_green">
                             <label for="id_lunch" class="tags__label">Обед</label>
                         </div>
                         <div class="tags__item">
-                            <input type="checkbox" name="dinner" id="id_dinner" class="tags__checkbox tags__checkbox_style_purple" checked>
+                            <input type="checkbox" name="dinner" id="id_dinner" class="tags__checkbox tags__checkbox_style_purple">
                             <label for="id_dinner" class="tags__label">Ужин</label>
                         </div>
                     </div>
@@ -146,15 +146,8 @@
 
 
 </main>
-<footer class="footer">
-    <div class="footer__container container">
-        <a href="#" class="footer__brand link">Продуктовый помощник</a>
-        <ul class="footer__items">
-            <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
-            <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
-        </ul>
-    </div>
-</footer>
+{% include "footer.html" %}
+
 <script src="{% static 'js/config/config.js' %}"></script>
 <script src="{% static 'js/components/Header.js' %}"></script>
 <script src="{% static 'js/utils/debouncing.js' %}"></script>

@@ -23,8 +23,8 @@ from django.conf.urls import handler404, handler500
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
-    path("auth/", include("users.urls")),
-    path("", include("recipe.urls")),
+    path('auth/', include("users.urls")),
+    path('', include("recipe.urls")),
 ]
 
 if settings.DEBUG:
@@ -35,4 +35,3 @@ if settings.DEBUG:
 
 handler404 = "recipe.views.page_not_found"
 handler500 = "recipe.views.server_error"
-

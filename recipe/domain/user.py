@@ -1,4 +1,4 @@
-from recipe.models import Favorite, ShoppingList
+from recipe.models import Favorite, Follow, ShoppingList
 
 
 class DomainUser:
@@ -10,3 +10,6 @@ class DomainUser:
 
     def shopping_list(self):
         return ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user_id=self.id)
+
+    def is_following(self, author):
+        return Follow.objects.filter(user_id__exact=self.id, author_id__exact=author).exists()

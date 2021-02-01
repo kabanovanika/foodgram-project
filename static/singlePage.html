@@ -23,25 +23,24 @@
 
             </ul>
             <ul class="nav__items list">
-               <li class="nav__item"><a href="auth/password-change" class="nav__link link">Изменить пароль</a></li>
+               <li class="nav__item"><a href="auth/password-change/" class="nav__link link">Изменить пароль</a></li>
                 <li class="nav__item"><a href="{% url 'logout'%}" class="nav__link link">Выход</a></li>
             </ul>
         </div>
     </nav>
 </header>
     <main class="main container">
-        <div class="single-card" data-id="371" data-author="{{ recipe.author.id }}">
+        <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
             <img src={{image.url}} alt="какой-то текст" class="single-card__image">
             <div class="single-card__info">
                 <div class="single-card__header-info">
                     <h1 class="single-card__title">{{ recipe.name }}</h1>
                     <div class="single-card__favorite">
-                        {% if is_favorite %}
-                        <button class="button button_style_none" name="favorites"><span class="icon-favorite icon-favorite_active"></span></button>
-                        <div class="single-card__favorite-tooltip tooltip">В избранном</div>
-                        {% else %}
-                        <button class="button button_style_none" name="favorites" data-out> {% csrf_token %}<span class="icon-favorite_big"></span></button>
-                        <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
+                    {% if is_favorite %}
+                    <button class="button button_style_none" name="favorites"><span class="icon-favorite icon-favorite_big icon-favorite_active"></span></button>
+                    {% else %}
+                    <button class="button button_style_none" name="favorites" data-out> {% csrf_token %}<span class="icon-favorite icon-favorite_big"></span></button>
+                    <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
                         {% endif %}
                     </div>
                 </div>
@@ -89,16 +88,7 @@
             </div>
         </div>
     </main>
-    <footer class="footer">
-        <div class="footer__container container">
-            <a href="#" class="footer__brand link">Продуктовый помощник</a>
-            <ul class="footer__items">
-                <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
-                <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
-            </ul>
-        </div>
-    </footer>
-<script src="{% static 'js/components/Purchases.js' %}"></script>
+{% include "footer.html" %}<script src="{% static 'js/components/Purchases.js' %}"></script>
 <script src="{% static 'js/components/Favorites.js' %}"></script>
 <script src="{% static 'js/components/Subscribe.js' %}"></script>
 <script src="{% static 'js/config/config.js' %}"></script>

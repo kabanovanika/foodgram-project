@@ -22,7 +22,6 @@
         <div class="nav__container container">
             <ul class="nav__items list">
                 <li class="nav__item nav__item_disabled"><a href="/home" class="nav__link link">Рецепты</a></li>
-<!--                <li class="nav__item nav__item_disabled"><a href="/purchases-list" class="nav__link link">Список покупок</a></li>-->
             </ul>
             <ul class="nav__items list">
                 <li class="nav__item"><a href="/auth/login" class="nav__link link">Войти</a></li>
@@ -36,7 +35,9 @@
         <h1 class="main__title">Войти на сайт</h1>
     </div>
     <div class="form-container">
+
         <form class="form" method="post" action="{% url 'login' %}">
+
             {% csrf_token %}
             <div class="form__group">
                 <label for="id_username" class="form__label">Имя</label>
@@ -61,14 +62,6 @@
 
 
 </main>
-<footer class="footer">
-    <div class="footer__container container">
-        <a href="#" class="footer__brand link">Продуктовый помощник</a>
-        <ul class="footer__items">
-            <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
-            <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
-        </ul>
-    </div>
-</footer>
+{% include "footer.html" %}
 </body>
 </html>

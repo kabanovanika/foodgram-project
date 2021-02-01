@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.urls import reverse_lazy
-from .forms import SignUpForm, PasswordChangingForm, PasswordsResetForm
 from django.contrib.auth import authenticate, login, logout
 
+from .forms import SignUpForm, PasswordChangingForm, PasswordsResetForm
+from recipe import domain
 
 
 def logout_view(request):
@@ -46,5 +47,3 @@ class SignUp(CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy('login')
     template_name = 'reg.html'
-
-
