@@ -42,6 +42,11 @@ def get_ingredients(request):
     query = request.GET.get('query')
     queryset = Ingredient.objects.filter(title__startswith=query)
     ing_list = []
+    if not queryset.exists():
+        ing_list = [
+            {"title": 'Такого ингредиента не существует', "dimension": ""}
+        ]
+        return JsonResponse(ing_list, safe=False)
     for item in queryset:
         dict_response = {"title": item.title, "dimension": item.dimension}
         ing_list.append(dict_response)
