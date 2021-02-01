@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='recipe',
             name='ingredients',
-            field=models.ManyToManyField(through='recipe.RecipeIngredient', to='recipe.Ingredient'),
+            field=models.ManyToManyField(through='recipe.RecipeIngredient',
+                                         to='recipe.Ingredient'),
         ),
     ]

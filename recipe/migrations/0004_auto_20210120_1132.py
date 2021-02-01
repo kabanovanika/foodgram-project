@@ -14,7 +14,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='recipe',
             name='image',
-            field=models.ImageField(default=django.utils.timezone.now, upload_to='recipes/'),
+            field=models.ImageField(default=django.utils.timezone.now,
+                                    upload_to='recipes/'),
             preserve_default=False,
         ),
     ]

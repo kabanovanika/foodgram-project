@@ -20,9 +20,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Purchases',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('favorite_recipe', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='purchases', to='recipe.recipe')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='purchases_user', to=settings.AUTH_USER_MODEL)),
+                ('id',
+                 models.AutoField(auto_created=True,
+                                  primary_key=True,
+                                  serialize=False,
+                                  verbose_name='ID')),
+                ('favorite_recipe',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='purchases',
+                                   to='recipe.recipe')),
+                ('user',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='purchases_user',
+                                   to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

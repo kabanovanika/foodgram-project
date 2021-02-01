@@ -11,7 +11,8 @@ from django.contrib.auth.decorators import login_required
 from . import domain
 from .domain.user import DomainUser
 from .forms import RecipeForm
-from .models import Recipe, Ingredient, RecipeIngredient, Favorite, User, Follow, Tag, ShoppingList
+from .models import Recipe, Ingredient, RecipeIngredient, Favorite, User, \
+    Follow, Tag, ShoppingList
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from collections import defaultdict
@@ -28,12 +29,7 @@ def page_in_dev(request):
 
 
 def page_not_found(request, exception):
-    return render(
-        request,
-        "misc/404.html",
-        {"path": request.path},
-        status=404
-    )
+    return render(request, "misc/404.html", {"path": request.path}, status=404)
 
 
 def server_error(request):
@@ -54,14 +50,13 @@ def get_ingredients(request):
 
 def get_ingredients_for_recipe_form(query_data):
     ingredients = [
-        query_data[key]
-        for key in query_data.keys()
+        query_data[key] for key in query_data.keys()
         if key.startswith("nameIngredient")
     ]
     amounts = [
-        query_data[key]
-        for key in query_data.keys()
-        if key.startswith("valueIngredient")]
+        query_data[key] for key in query_data.keys()
+        if key.startswith("valueIngredient")
+    ]
 
     result = zip(ingredients, amounts)
 
@@ -83,14 +78,15 @@ def index(request):
         in_shop_list = domain_user.shopping_list()
         in_favorite = domain_user.favorites()
         counter = domain.amount_of_purchases(request.user)
-        return render(request, 'indexAuth.html', {
-            'page': page,
-            'paginator': paginator,
-            'image': image,
-            'in_shop_list': in_shop_list,
-            'in_favorite': in_favorite,
-            'counter': counter,
-        })
+        return render(
+            request, 'indexAuth.html', {
+                'page': page,
+                'paginator': paginator,
+                'image': image,
+                'in_shop_list': in_shop_list,
+                'in_favorite': in_favorite,
+                'counter': counter,
+            })
     else:
         return render(request, 'indexNotAuth.html', {
             'page': page,
@@ -120,12 +116,14 @@ def new_recipe(request):
                 form.save_m2m()
                 return redirect('index')
             return redirect('/auth/login')
-    return render(request, "formRecipe.html", {"form": form, "counter": counter})
+    return render(request, "formRecipe.html", {
+        "form": form,
+        "counter": counter
+    })
 
 
 def recipe_page(request, recipe_id):
-    recipe = get_object_or_404(Recipe,
-                               id__exact=recipe_id)
+    recipe = get_object_or_404(Recipe, id__exact=recipe_id)
     image = recipe.image
     author = recipe.author
     cooking_time = recipe.cooking_time
@@ -137,29 +135,29 @@ def recipe_page(request, recipe_id):
         in_shop_list = domain.recipe_in_shop_list(request.user, recipe.id)
         following = domain_user.is_following(author=author)
         counter = domain.amount_of_purchases(request.user)
-        return render(request, "singlePage.html", {
-            "recipe": recipe,
-            "author": author,
-            "image": image,
-            "cooking_time": cooking_time,
-            "ingredients": ingredients,
-            "description": description,
-            'following': following,
-            'in_shop_list': in_shop_list,
-            'is_favorite': is_favorite,
-            'counter': counter,
-
-        })
+        return render(
+            request, "singlePage.html", {
+                "recipe": recipe,
+                "author": author,
+                "image": image,
+                "cooking_time": cooking_time,
+                "ingredients": ingredients,
+                "description": description,
+                'following': following,
+                'in_shop_list': in_shop_list,
+                'is_favorite': is_favorite,
+                'counter': counter,
+            })
     else:
-        return render(request, "singlePageNotAuth.html", {
-            "recipe": recipe,
-            "author": author,
-            "image": image,
-            "cooking_time": cooking_time,
-            "ingredients": ingredients,
-            "description": description,
-
-        })
+        return render(
+            request, "singlePageNotAuth.html", {
+                "recipe": recipe,
+                "author": author,
+                "image": image,
+                "cooking_time": cooking_time,
+                "ingredients": ingredients,
+                "description": description,
+            })
 
 
 @login_required
@@ -167,9 +165,9 @@ def recipe_edit(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     if request.user != recipe.author:
         return redirect("index")
-    form = RecipeForm(
-        request.POST or None, files=request.FILES or None, instance=recipe
-    )
+    form = RecipeForm(request.POST or None,
+                      files=request.FILES or None,
+                      instance=recipe)
     if request.method == "POST":
         if request.POST.get('delete') == '':
             recipe.delete()
@@ -190,7 +188,13 @@ def recipe_edit(request, recipe_id):
         return redirect('index')
 
     return render(
-        request, "formChangeRecipe.html", {"form": form, "recipe": recipe, "recipe_id": recipe_id, },
+        request,
+        "formChangeRecipe.html",
+        {
+            "form": form,
+            "recipe": recipe,
+            "recipe_id": recipe_id,
+        },
     )
 
 
@@ -213,67 +217,80 @@ def profile(request, username):
         in_shop_list = domain_user.shopping_list()
         in_favorite = domain_user.favorites()
         counter = domain.amount_of_purchases(request.user)
-        return render(request, "authorRecipe.html", {
-            'user_id': user_id,
-            'page': page,
-            'paginator': paginator,
-            'image': image,
-            'name': user_name,
-            'in_shop_list': in_shop_list,
-            'in_favorite': in_favorite,
-            'counter': counter,
-            'following': following,
-        })
+        return render(
+            request, "authorRecipe.html", {
+                'user_id': user_id,
+                'page': page,
+                'paginator': paginator,
+                'image': image,
+                'name': user_name,
+                'in_shop_list': in_shop_list,
+                'in_favorite': in_favorite,
+                'counter': counter,
+                'following': following,
+            })
     else:
-        return render(request, "authorRecipeNotAuth.html", {
-            'page': page,
-            'paginator': paginator,
-            'image': image,
-            'name': user_name,
-        })
+        return render(
+            request, "authorRecipeNotAuth.html", {
+                'page': page,
+                'paginator': paginator,
+                'image': image,
+                'name': user_name,
+            })
 
 
 @login_required
 @csrf_exempt
 def profile_follow(request):
-    authors = [f.author for f in Follow.objects.filter(user=request.user).all()]
-    recipes_from_author_id = {a.id: Recipe.objects.filter(author__exact=a)[:3] for a in authors}
-    recipe_count_from_author_id = {a.id: Recipe.objects.filter(author__exact=a).count() - 3 for a in authors}
+    authors = [
+        f.author for f in Follow.objects.filter(user=request.user).all()
+    ]
+    recipes_from_author_id = {
+        a.id: Recipe.objects.filter(author__exact=a)[:3]
+        for a in authors
+    }
+    recipe_count_from_author_id = {
+        a.id: Recipe.objects.filter(author__exact=a).count() - 3
+        for a in authors
+    }
     paginator = Paginator(authors, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     counter = domain.amount_of_purchases(request.user)
-    return render(request, 'myFollow.html', {
-        'authors': authors,
-        'recipes_from_author_id': recipes_from_author_id,
-        'recipe_count_from_author_id': recipe_count_from_author_id,
-        'page': page,
-        'paginator': paginator,
-        'counter': counter,
-    })
+    return render(
+        request, 'myFollow.html', {
+            'authors': authors,
+            'recipes_from_author_id': recipes_from_author_id,
+            'recipe_count_from_author_id': recipe_count_from_author_id,
+            'page': page,
+            'paginator': paginator,
+            'counter': counter,
+        })
 
 
 class Purchases(LoginRequiredMixin, View):
-
     def post(self, request):
         reg = json.loads(request.body)
         recipe_id = reg.get("id", None)
         if recipe_id is not None:
             recipe = get_object_or_404(Recipe, id__exact=recipe_id)
-            ShoppingList.objects.get_or_create(user=request.user, purchase_recipe=recipe)
+            ShoppingList.objects.get_or_create(user=request.user,
+                                               purchase_recipe=recipe)
             return JsonResponse({"success": True})
         return JsonResponse({"success": False}, status=400)
 
     def delete(self, request, recipe_id):
-        purchase_recipe = get_object_or_404(
-            ShoppingList, purchase_recipe=recipe_id, user=request.user)
+        purchase_recipe = get_object_or_404(ShoppingList,
+                                            purchase_recipe=recipe_id,
+                                            user=request.user)
         purchase_recipe.delete()
         return JsonResponse({"success": True})
 
 
 @login_required()
 def purchases_list(request):
-    recipes_id = ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user__exact=request.user)
+    recipes_id = ShoppingList.objects.values_list(
+        'purchase_recipe_id', flat=True).filter(user__exact=request.user)
     recipes = Recipe.objects.filter(id__in=recipes_id)
     image = Recipe.image
     counter = domain.amount_of_purchases(request.user)
@@ -285,9 +302,12 @@ def purchases_list(request):
 
 
 def shop_list_file(request):
-    recipes_id = ShoppingList.objects.values_list('purchase_recipe_id', flat=True).filter(user__exact=request.user)
+    recipes_id = ShoppingList.objects.values_list(
+        'purchase_recipe_id', flat=True).filter(user__exact=request.user)
     recipes = Recipe.objects.filter(id__in=recipes_id)
-    raw_shop_list = list(RecipeIngredient.objects.filter(recipe__in=recipes).values('ingredient_id', 'amount'))
+    raw_shop_list = list(
+        RecipeIngredient.objects.filter(recipe__in=recipes).values(
+            'ingredient_id', 'amount'))
     d = []
     for i in range(len(raw_shop_list)):
         k = raw_shop_list[i]['ingredient_id']
@@ -298,30 +318,35 @@ def shop_list_file(request):
         shop_dict[k] += v
     final_shop_list = ['Список продуктов:']
     for k, v in shop_dict.items():
-        ingredient_name = Ingredient.objects.values_list('title', flat=True).get(id=k)
-        ingredient_dimension = Ingredient.objects.values_list('dimension', flat=True).get(id=k)
-        full_ingredient_info = f'{ingredient_name} - {v} ({ingredient_dimension})'
+        ingredient_name = Ingredient.objects.values_list('title',
+                                                         flat=True).get(id=k)
+        ingredient_dimension = Ingredient.objects.values_list(
+            'dimension', flat=True).get(id=k)
+        full_ingredient_info = f'{ingredient_name} - {v}' \
+                               f' ({ingredient_dimension})'
         final_shop_list.append(full_ingredient_info)
     file_data = '\n'.join(final_shop_list)
-    response = HttpResponse(file_data, content_type='application/text charset=utf-8')
+    response = HttpResponse(file_data,
+                            content_type='application/text charset=utf-8')
     response['Content-Disposition'] = 'attachment; filename="to_buy.txt"'
     return response
 
 
 class Favorites(LoginRequiredMixin, View):
-
     def post(self, request):
         reg = json.loads(request.body)
         recipe_id = reg.get("id", None)
         if recipe_id is not None:
             recipe = get_object_or_404(Recipe, id__exact=recipe_id)
-            Favorite.objects.get_or_create(user=request.user, favorite_recipe=recipe)
+            Favorite.objects.get_or_create(user=request.user,
+                                           favorite_recipe=recipe)
             return JsonResponse({"success": True})
         return JsonResponse({"success": False}, status=400)
 
     def delete(self, request, recipe_id):
-        favorite_recipe = get_object_or_404(
-            Favorite, favorite_recipe=recipe_id, user=request.user)
+        favorite_recipe = get_object_or_404(Favorite,
+                                            favorite_recipe=recipe_id,
+                                            user=request.user)
         favorite_recipe.delete()
         return JsonResponse({"success": True})
 
@@ -334,25 +359,26 @@ def favorite_recipes(request):
     tags = []
     if filter_values:
         tags = Tag.objects.exclude(slug__in=filter_values)
-    recipes = domain.get_recipes_with_tags(tags, recipe_id_seq=favorite_recipe_ids)
+    recipes = domain.get_recipes_with_tags(tags,
+                                           recipe_id_seq=favorite_recipe_ids)
     image = Recipe.image
     paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     in_shop_list = domain_user.shopping_list()
-    return render(request, "favorite.html", {
-        'recipes': recipes,
-        'page': page,
-        'paginator': paginator,
-        'image': image,
-        'in_shop_list': in_shop_list,
-        'in_favorite': favorite_recipe_ids,
-        'counter': counter,
-    })
+    return render(
+        request, "favorite.html", {
+            'recipes': recipes,
+            'page': page,
+            'paginator': paginator,
+            'image': image,
+            'in_shop_list': in_shop_list,
+            'in_favorite': favorite_recipe_ids,
+            'counter': counter,
+        })
 
 
 class Subscriptions(LoginRequiredMixin, View):
-
     def post(self, request):
         reg = json.loads(request.body)
         user_id = reg.get("id", None)
@@ -365,7 +391,6 @@ class Subscriptions(LoginRequiredMixin, View):
         return JsonResponse({"success": False}, status=400)
 
     def delete(self, request, author):
-        follower = get_object_or_404(
-            Follow, author=author, user=request.user)
+        follower = get_object_or_404(Follow, author=author, user=request.user)
         follower.delete()
         return JsonResponse({"success": True})

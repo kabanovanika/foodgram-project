@@ -20,7 +20,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='recipe',
             name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recipes', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='recipes',
+                to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='recipe',
@@ -30,7 +33,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='recipe',
             name='tag',
-            field=models.ManyToManyField(related_name='recipes', to='recipe.Tag'),
+            field=models.ManyToManyField(related_name='recipes',
+                                         to='recipe.Tag'),
         ),
         migrations.AlterField(
             model_name='recipeingredient',
@@ -40,6 +44,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='recipeingredient',
             name='ingredient',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recipe_ingredients', to='recipe.ingredient'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='recipe_ingredients',
+                to='recipe.ingredient'),
         ),
     ]

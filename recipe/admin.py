@@ -5,22 +5,24 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from recipe.models import Recipe, Ingredient, RecipeIngredient, Tag, Follow, Favorite, ShoppingList
+from recipe.models import Recipe, Ingredient, RecipeIngredient, \
+    Tag, Follow, Favorite, ShoppingList
 
 User = get_user_model()
 models = apps.get_models()
 
-UserAdmin.list_filter = (("email", DropdownFilter), ("username", DropdownFilter))
+UserAdmin.list_filter = (("email", DropdownFilter), ("username",
+                                                     DropdownFilter))
 
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ("author", "name", "text", "image")
-    list_filter = (("name", DropdownFilter),)
+    list_filter = (("name", DropdownFilter), )
 
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ("title", "dimension")
-    list_filter = (("title", DropdownFilter),)
+    list_filter = (("title", DropdownFilter), )
 
 
 class RecipeIngredientAdmin(admin.ModelAdmin):

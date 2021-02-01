@@ -28,37 +28,33 @@ class Recipe(models.Model):
     name = models.CharField(max_length=300)
     image = models.ImageField(upload_to='recipes/', )
     text = models.TextField()
-    ingredients = models.ManyToManyField(
-        Ingredient,
-        through='RecipeIngredient',
-        through_fields=('recipe', 'ingredient')
-    )
+    ingredients = models.ManyToManyField(Ingredient,
+                                         through='RecipeIngredient',
+                                         through_fields=('recipe',
+                                                         'ingredient'))
     tags = models.ManyToManyField(Tag, related_name="recipes")
     cooking_time = models.IntegerField(default=0)
     pub_date = models.DateTimeField("date published", auto_now_add=True)
 
     class Meta:
-        ordering = ('-pub_date',)
+        ordering = ('-pub_date', )
 
     def __str__(self):
         return self.name
 
 
 class RecipeIngredient(models.Model):
-    ingredient = models.ForeignKey(
-        Ingredient,
-        on_delete=models.CASCADE,
-        related_name='recipe_ingredients'
-    )
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        related_name='recipes'
-    )
+    ingredient = models.ForeignKey(Ingredient,
+                                   on_delete=models.CASCADE,
+                                   related_name='recipe_ingredients')
+    recipe = models.ForeignKey(Recipe,
+                               on_delete=models.CASCADE,
+                               related_name='recipes')
     amount = models.IntegerField()
 
     def __str__(self):
-        return f"{self.ingredient.title} - {self.amount} ({self.ingredient.dimension})"
+        return f"{self.ingredient.title} - {self.amount} " \
+               f"({self.ingredient.dimension})"
 
 
 class Follow(models.Model):
