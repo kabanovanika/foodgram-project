@@ -2,7 +2,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import password_validation
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 
 
@@ -23,13 +22,6 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('first_name', 'username', 'email')
         exclude = ('last_name', 'password2',)
-
-
-# class LoginForm(forms.Form):
-#     class Meta:
-#         model = User
-#         fields = ('username', 'password')
-#         error_messages = {'username': 'Имя пользователя и пароль не совпадают. Введите правильные данные.'}
 
 
 class PasswordChangingForm(PasswordChangeForm):

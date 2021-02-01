@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ImageField
 
-from .models import Recipe, RecipeIngredient, Ingredient, Tag
+from .models import Recipe, Tag
 from django.forms.widgets import ClearableFileInput
 
 

@@ -5,7 +5,6 @@ from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 
 from .forms import SignUpForm, PasswordChangingForm, PasswordsResetForm
-from recipe import domain
 
 
 def logout_view(request):
