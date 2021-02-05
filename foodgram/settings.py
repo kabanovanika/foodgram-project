@@ -12,8 +12,9 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '[::1]',
 ]
+# APPEND_SLASH = False
 
-APPEND_SLASH = False
+ITEMS_PER_PAGE = 6
 
 INSTALLED_APPS = [
     'django.contrib.admin',

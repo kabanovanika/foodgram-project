@@ -1,6 +1,25 @@
 from typing import Iterable, List, Optional
 
+from django.core.paginator import Paginator
+
 from recipe.models import Favorite, Recipe, ShoppingList
+
+FILTERS = ['breakfast', 'lunch', 'dinner']
+
+
+def get_ingredients_for_recipe_form(query_data):
+    ingredients = [
+        query_data[key] for key in query_data.keys()
+        if key.startswith('nameIngredient')
+    ]
+    amounts = [
+        query_data[key] for key in query_data.keys()
+        if key.startswith('valueIngredient')
+    ]
+
+    result = zip(ingredients, amounts)
+
+    return result
 
 
 def get_recipes_with_tags(tags: List[str],
@@ -37,3 +56,13 @@ def amount_of_purchases(user):
     if amount == 0:
         amount = ''
     return amount
+
+
+def get_filter_values(request):
+    filter_values = [f for f in FILTERS if request.GET.get(f) == 'off']
+    return filter_values
+
+
+def get_page_content(request):
+    page_number = request.GET.get('page')
+    return page_number

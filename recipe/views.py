@@ -11,12 +11,16 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 
+from foodgram import settings
 from . import domain
 from .domain.user import DomainUser
 from .forms import RecipeForm
 from .models import (Favorite, Follow, Ingredient, Recipe, RecipeIngredient,
                      ShoppingList, Tag, User)
 
+BREAKFAST_TAG = 'breakfast'
+LUNCH_TAG = 'lunch'
+DINNER_TAG = 'dinner'
 FILTERS = ['breakfast', 'lunch', 'dinner']
 
 handler404 = 'recipe.views.page_not_found'
@@ -56,30 +60,15 @@ def get_ingredients(request):
     return JsonResponse(ing_list, safe=False)
 
 
-def get_ingredients_for_recipe_form(query_data):
-    ingredients = [
-        query_data[key] for key in query_data.keys()
-        if key.startswith('nameIngredient')
-    ]
-    amounts = [
-        query_data[key] for key in query_data.keys()
-        if key.startswith('valueIngredient')
-    ]
-
-    result = zip(ingredients, amounts)
-
-    return result
-
-
 def index(request):
     image = Recipe.image
-    filter_values = [f for f in FILTERS if request.GET.get(f) == 'off']
+    filter_values = domain.get_filter_values(request)
     tags = []
     if filter_values:
         tags = Tag.objects.exclude(slug__in=filter_values)
     recipes = domain.get_recipes_with_tags(tags)
-    paginator = Paginator(recipes, 6)
-    page_number = request.GET.get('page')
+    paginator = Paginator(recipes, settings.ITEMS_PER_PAGE)
+    page_number = domain.get_page_content(request)
     page = paginator.get_page(page_number)
     if request.user.is_authenticated:
         domain_user = DomainUser(request.user.id)
@@ -107,7 +96,7 @@ def index(request):
 def new_recipe(request):
     counter = domain.amount_of_purchases(request.user)
     form = RecipeForm(request.POST or None, files=request.FILES or None)
-    ingredients = get_ingredients_for_recipe_form(request.POST)
+    ingredients = domain.get_ingredients_for_recipe_form(request.POST)
     if form.is_valid():
         if request.user.is_authenticated:
             recipe = form.save(commit=False)
@@ -178,7 +167,7 @@ def recipe_edit(request, recipe_id):
     if request.POST.get('delete') == '':
         recipe.delete()
         return redirect('index')
-    ingredients = get_ingredients_for_recipe_form(request.POST)
+    ingredients = domain.get_ingredients_for_recipe_form(request.POST)
     if form.is_valid():
         RecipeIngredient.objects.filter(recipe=recipe).delete()
         recipe = form.save(commit=False)
@@ -207,14 +196,14 @@ def profile(request, username):
     user = get_object_or_404(User, username__exact=username)
     user_id = user.id
     user_name = user.first_name
-    filter_values = [f for f in FILTERS if request.GET.get(f) == 'off']
+    filter_values = domain.get_filter_values(request)
     tags = []
     if filter_values:
         tags = Tag.objects.exclude(slug__in=filter_values)
     recipes = domain.get_recipes_with_tags(tags, author_id=user_id)
-    paginator = Paginator(recipes, 6)
+    paginator = Paginator(recipes, settings.ITEMS_PER_PAGE)
     image = Recipe.image
-    page_number = request.GET.get('page')
+    page_number = domain.get_page_content(request)
     page = paginator.get_page(page_number)
     if request.user.is_authenticated:
         domain_user = DomainUser(request.user.id)
@@ -260,8 +249,8 @@ def profile_follow(request):
         a.id: Recipe.objects.filter(author__exact=a).count() - 3
         for a in authors
     }
-    paginator = Paginator(authors, 6)
-    page_number = request.GET.get('page')
+    paginator = Paginator(authors, settings.ITEMS_PER_PAGE)
+    page_number = domain.get_page_content(request)
     page = paginator.get_page(page_number)
     counter = domain.amount_of_purchases(request.user)
     return render(
@@ -356,15 +345,15 @@ def favorite_recipes(request):
     counter = domain.amount_of_purchases(request.user)
     domain_user = DomainUser(request.user.id)
     favorite_recipe_ids = domain_user.favorites()
-    filter_values = [f for f in FILTERS if request.GET.get(f) == 'off']
+    filter_values = domain.get_filter_values(request)
     tags = []
     if filter_values:
         tags = Tag.objects.exclude(slug__in=filter_values)
     recipes = domain.get_recipes_with_tags(tags,
                                            recipe_id_seq=favorite_recipe_ids)
     image = Recipe.image
-    paginator = Paginator(recipes, 6)
-    page_number = request.GET.get('page')
+    paginator = Paginator(recipes, settings.ITEMS_PER_PAGE)
+    page_number = domain.get_page_content(request)
     page = paginator.get_page(page_number)
     in_shop_list = domain_user.shopping_list()
     return render(

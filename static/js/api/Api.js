@@ -4,7 +4,7 @@ class Api {
         this.apiUrl =  apiUrl;
     }
   getPurchases () {
-    return fetch(`/purchases`, {
+    return fetch('/purchases', {
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': document.getElementsByName("csrfmiddlewaretoken")[0].value
@@ -18,7 +18,7 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(`/purchases`, {
+    return fetch('/purchases', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
