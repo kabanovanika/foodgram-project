@@ -1,8 +1,9 @@
 from django import forms
 from django.forms import ImageField
+from django.forms.widgets import ClearableFileInput
+from django.shortcuts import get_object_or_404
 
 from .models import Recipe, Tag
-from django.forms.widgets import ClearableFileInput
 
 
 class MyClearableFileInput(ClearableFileInput):
@@ -16,16 +17,17 @@ class RecipeForm(forms.ModelForm):
     def __init__(self, data=None, *args, **kwargs):
         if data is not None:
             data = data.copy()
-            for tag in ("breakfast", "lunch", "dinner"):
+            for tag in ('breakfast', 'lunch', 'dinner'):
                 if tag in data:
-                    data.update({"tags": Tag.objects.get(slug=tag)})
+                    data.update(
+                        {'tags': get_object_or_404(Tag, slug__exact=tag)})
         super().__init__(data=data, *args, **kwargs)
         self.fields['image'].required = True
 
     class Meta:
         model = Recipe
         fields = ('name', 'text', 'image', 'tags', 'cooking_time')
-        exclude = ('ingredients', )
+        exclude = ('ingredients',)
         help_texts = {
             'name': 'Название рецепта',
             'text': 'Описание рецепта',

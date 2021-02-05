@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
-from django.views.generic import CreateView
-from django.contrib.auth.views import PasswordChangeView, PasswordResetView
-from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
 
-from .forms import SignUpForm, PasswordChangingForm, PasswordsResetForm
+from .forms import PasswordChangingForm, PasswordsResetForm, SignUpForm
 
 
 def logout_view(request):
@@ -37,7 +37,7 @@ def view_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/home')
+            return redirect('index')
 
     return render(request, 'authForm.html')
 

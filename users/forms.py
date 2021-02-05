@@ -1,8 +1,8 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django import forms
+from django.contrib.auth.forms import (PasswordChangeForm, PasswordResetForm,
+                                       UserCreationForm)
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 
 
 class SignUpForm(UserCreationForm):
@@ -62,5 +62,5 @@ class PasswordChangingForm(PasswordChangeForm):
 
 
 class PasswordsResetForm(PasswordResetForm):
-    email = forms.EmailField(label=_("Адрес электронной почты"),
+    email = forms.EmailField(label=_('Адрес электронной почты'),
                              max_length=254)

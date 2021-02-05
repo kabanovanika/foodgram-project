@@ -1,6 +1,6 @@
-from typing import Optional, List, Iterable
+from typing import Iterable, List, Optional
 
-from recipe.models import Recipe, Favorite, ShoppingList
+from recipe.models import Favorite, Recipe, ShoppingList
 
 
 def get_recipes_with_tags(tags: List[str],
@@ -33,7 +33,7 @@ def recipe_in_shop_list(user_id, recipe_id):
 def amount_of_purchases(user):
     counter = ShoppingList.objects.values_list('purchase_recipe_id',
                                                flat=True).filter(user_id=user)
-    amount = len(counter)
+    amount = counter.count()
     if amount == 0:
         amount = ''
     return amount
