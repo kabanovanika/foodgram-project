@@ -3,6 +3,7 @@ from django.forms import ImageField
 from django.forms.widgets import ClearableFileInput
 from django.shortcuts import get_object_or_404
 
+from .domain.recipe import EVERY_TAG
 from .models import Recipe, Tag
 
 
@@ -17,7 +18,7 @@ class RecipeForm(forms.ModelForm):
     def __init__(self, data=None, *args, **kwargs):
         if data is not None:
             data = data.copy()
-            for tag in ('breakfast', 'lunch', 'dinner'):
+            for tag in EVERY_TAG:
                 if tag in data:
                     data.update(
                         {'tags': get_object_or_404(Tag, slug__exact=tag)})

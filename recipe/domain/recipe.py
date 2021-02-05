@@ -1,10 +1,18 @@
+import enum
 from typing import Iterable, List, Optional
 
 from django.core.paginator import Paginator
 
 from recipe.models import Favorite, Recipe, ShoppingList
 
-FILTERS = ['breakfast', 'lunch', 'dinner']
+
+class Tag(str, enum.Enum):
+    BREAKFAST = 'breakfast'
+    LUNCH = 'lunch'
+    DINNER = 'dinner'
+
+
+EVERY_TAG = [member.value for member in Tag]
 
 
 def get_ingredients_for_recipe_form(query_data):
@@ -59,7 +67,7 @@ def amount_of_purchases(user):
 
 
 def get_filter_values(request):
-    filter_values = [f for f in FILTERS if request.GET.get(f) == 'off']
+    filter_values = [f for f in EVERY_TAG if request.GET.get(f) == 'off']
     return filter_values
 
 

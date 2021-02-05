@@ -18,10 +18,6 @@ from .forms import RecipeForm
 from .models import (Favorite, Follow, Ingredient, Recipe, RecipeIngredient,
                      ShoppingList, Tag, User)
 
-BREAKFAST_TAG = 'breakfast'
-LUNCH_TAG = 'lunch'
-DINNER_TAG = 'dinner'
-FILTERS = ['breakfast', 'lunch', 'dinner']
 
 handler404 = 'recipe.views.page_not_found'
 handler500 = 'recipe.views.server_error'
