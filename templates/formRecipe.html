@@ -40,7 +40,7 @@
                     {% endfor %}
                 {% endif %}
     <div class="form-container">
-    <form class="form" method="post" action="{% url 'formRecipe' %}" enctype='multipart/form-data'>
+    <form class="form" method="post" action="{% url 'new_recipe' %}" enctype='multipart/form-data'>
             {% csrf_token %}
             <div class="form__group">
             <label for="name" class="form__label">{{ form.name.label_tag }}</label>
