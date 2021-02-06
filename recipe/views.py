@@ -18,7 +18,6 @@ from .forms import RecipeForm
 from .models import (Favorite, Follow, Ingredient, Recipe, RecipeIngredient,
                      ShoppingList, Tag, User)
 
-
 handler404 = 'recipe.views.page_not_found'
 handler500 = 'recipe.views.server_error'
 
@@ -66,26 +65,21 @@ def index(request):
     paginator = Paginator(recipes, settings.ITEMS_PER_PAGE)
     page_number = domain.get_page_content(request)
     page = paginator.get_page(page_number)
+
+    context = {
+        'page': page,
+        'paginator': paginator,
+        'image': image,
+        'is_user_authenticated': request.user.is_authenticated
+    }
+
     if request.user.is_authenticated:
         domain_user = DomainUser(request.user.id)
-        in_shop_list = domain_user.shopping_list()
-        in_favorite = domain_user.favorites()
-        counter = domain.amount_of_purchases(request.user)
-        return render(
-            request, 'indexAuth.html', {
-                'page': page,
-                'paginator': paginator,
-                'image': image,
-                'in_shop_list': in_shop_list,
-                'in_favorite': in_favorite,
-                'counter': counter,
-            })
-    else:
-        return render(request, 'indexNotAuth.html', {
-            'page': page,
-            'paginator': paginator,
-            'image': image,
-        })
+        context['in_shop_list'] = domain_user.shopping_list()
+        context['in_favorite'] = domain_user.favorites()
+        context['counter'] = domain.amount_of_purchases(request.user)
+
+    return render(request, 'index.html', context)
 
 
 @login_required

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+{% load user_filters %}
+{% csrf_token %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Рецепты</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+</head>
+<body class="body">
+<header class="header">
+    {% if is_user_authenticated %}
+    {% include "navAuth.html" %}
+    {% else %}
+    {% include "navNotAuth.html" %}
+    {% endif %}
+</header>
+<main class="main container">
+    <div class="main__header">
+        <h1 class="main__title">Рецепты</h1>
+        {% include "tags.html" %}
+    </div>
+
+
+    <div class="card-list">
+
+        {% for recipe in page %}
+        {% include "recipe_on_page.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite is_user_authenticated=is_user_authenticated %}
+        {% endfor %}
+
+    </div>
+
+
+    {% if page.has_other_pages %}
+    {% include "paginator.html" with items=page paginator=paginator %}
+    {% endif %}
+
+</main>
+{% include "footer.html" %}
+<script src="{% static 'js/components/MainCards.js' %}"></script>
+<script src="{% static 'js/components/Purchases.js' %}"></script>
+<script src="{% static 'js/components/Favorites.js' %}"></script>
+
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/CardList.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+
+<script src="{% static 'js/api/Api.js' %}"></script>
+{% if is_user_authenticated %}
+    <script src="{% static 'indexAuth.js' %}"></script>
+    {% else %}
+    <script src="{% static 'indexNotAuth.js' %}"></script>
+    {% endif %}
+</body>
+</html>
