@@ -115,35 +115,27 @@ def recipe_page(request, recipe_id):
     cooking_time = recipe.cooking_time
     ingredients = RecipeIngredient.objects.filter(recipe_id=recipe_id)
     description = recipe.text
+
+    context = {
+        'is_user_authenticated': request.user.is_authenticated,
+        'recipe': recipe,
+        'author': author,
+        'image': image,
+        'cooking_time': cooking_time,
+        'ingredients': ingredients,
+        'description': description,
+    }
+
     if request.user.is_authenticated:
         domain_user = DomainUser(request.user.id)
-        is_favorite = domain.recipe_is_favorite(request.user, recipe.id)
-        in_shop_list = domain.recipe_in_shop_list(request.user, recipe.id)
-        following = domain_user.is_following(author=author)
-        counter = domain.amount_of_purchases(request.user)
-        return render(
-            request, 'singlePage.html', {
-                'recipe': recipe,
-                'author': author,
-                'image': image,
-                'cooking_time': cooking_time,
-                'ingredients': ingredients,
-                'description': description,
-                'following': following,
-                'in_shop_list': in_shop_list,
-                'is_favorite': is_favorite,
-                'counter': counter,
-            })
-    else:
-        return render(
-            request, 'singlePageNotAuth.html', {
-                'recipe': recipe,
-                'author': author,
-                'image': image,
-                'cooking_time': cooking_time,
-                'ingredients': ingredients,
-                'description': description,
-            })
+        context['is_favorite'] = domain.recipe_is_favorite(request.user,
+                                                           recipe.id)
+        context['in_shop_list'] = domain.recipe_in_shop_list(request.user,
+                                                             recipe.id)
+        context['following'] = domain_user.is_following(author=author)
+        context['counter'] = domain.amount_of_purchases(request.user)
+
+    return render(request, 'singlePage.html', context)
 
 
 @login_required
