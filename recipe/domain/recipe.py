@@ -1,8 +1,6 @@
 import enum
 from typing import Iterable, List, Optional
 
-from django.core.paginator import Paginator
-
 from recipe.models import Favorite, Recipe, ShoppingList
 
 
