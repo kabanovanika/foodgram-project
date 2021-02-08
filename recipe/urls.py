@@ -25,8 +25,5 @@ urlpatterns = (
     path('recipe/<int:recipe_id>/', views.recipe_page, name='recipe'),
     path('recipe/<int:recipe_id>/edit/', views.recipe_edit,
          name='recipe_edit'),
-    path('foodgram-page/', views.page_in_dev, name='foodgram'),
-    path('about-author/', views.page_in_dev, name='about_author'),
-    path('technologies-page/', views.page_in_dev, name='technologies'),
     path('<str:username>/', views.profile, name='profile'),
 )

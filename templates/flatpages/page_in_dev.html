@@ -1,4 +1,13 @@
 {% extends "base.html" %}
+{% block header %}
+<nav class="nav">
+        <div class="nav__container container">
+            <ul class="nav__items list">
+                <li class="nav__item nav__item_active"><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
 {% load static %}
 {% csrf_token %}
 {% load user_filters %}

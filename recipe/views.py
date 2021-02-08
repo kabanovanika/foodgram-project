@@ -22,16 +22,6 @@ handler404 = 'recipe.views.page_not_found'
 handler500 = 'recipe.views.server_error'
 
 
-def page_in_dev(request):
-    context = {
-        'is_user_authenticated': request.user.is_authenticated
-    }
-    if request.user.is_authenticated:
-        context['counter'] = domain.amount_of_purchases(request.user)
-
-    return render(request, 'page_in_dev.html', context)
-
-
 def page_not_found(request, exception):
     return render(request, 'misc/404.html', {'path': request.path}, status=404)
 
@@ -215,7 +205,7 @@ def profile(request, username):
 @csrf_exempt
 def profile_follow(request):
     authors = [
-        f.author for f in Follow.objects.filter(user=request.user).all()
+        f.author for f in Follow.objects.filter(user=request.user)
     ]  # list must contain query objects, not just values (ids),
     # for paginator working correct
     recipes_from_author_id = {
