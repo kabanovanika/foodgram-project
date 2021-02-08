@@ -48,4 +48,3 @@ const singleCard = new SingleCard(container, '.single-card', header, api, true,{
 });
 singleCard.addEvent();
 
-

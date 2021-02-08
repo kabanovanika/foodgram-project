@@ -23,11 +23,13 @@ handler500 = 'recipe.views.server_error'
 
 
 def page_in_dev(request):
+    context = {
+        'is_user_authenticated': request.user.is_authenticated
+    }
     if request.user.is_authenticated:
-        counter = domain.amount_of_purchases(request.user)
-        return render(request, 'page_in_dev_auth.html', {'counter': counter})
-    else:
-        return render(request, 'page_in_dev_not_auth.html')
+        context['counter'] = domain.amount_of_purchases(request.user)
+
+    return render(request, 'page_in_dev.html', context)
 
 
 def page_not_found(request, exception):
@@ -104,7 +106,8 @@ def new_recipe(request):
         return redirect('login')
     return render(request, 'formRecipe.html', {
         'form': form,
-        'counter': counter
+        'counter': counter,
+        'is_user_authenticated': request.user.is_authenticated,
     })
 
 
@@ -170,6 +173,7 @@ def recipe_edit(request, recipe_id):
             'form': form,
             'recipe': recipe,
             'recipe_id': recipe_id,
+            'is_user_authenticated': request.user.is_authenticated,
         },
     )
 
@@ -187,42 +191,33 @@ def profile(request, username):
     image = Recipe.image
     page_number = domain.get_page_content(request)
     page = paginator.get_page(page_number)
+
+    context = {
+        'page': page,
+        'paginator': paginator,
+        'image': image,
+        'is_user_authenticated': request.user.is_authenticated,
+        'user_id': user_id,
+
+    }
+
     if request.user.is_authenticated:
         domain_user = DomainUser(request.user.id)
-        following = domain_user.is_following(author=user_id)
-        in_shop_list = domain_user.shopping_list()
-        in_favorite = domain_user.favorites()
-        counter = domain.amount_of_purchases(request.user)
-        return render(
-            request, 'authorRecipe.html', {
-                'user_id': user_id,
-                'page': page,
-                'paginator': paginator,
-                'image': image,
-                'name': user_name,
-                'in_shop_list': in_shop_list,
-                'in_favorite': in_favorite,
-                'counter': counter,
-                'following': following,
-            })
-    else:
-        return render(
-            request, 'authorRecipeNotAuth.html', {
-                'page': page,
-                'paginator': paginator,
-                'image': image,
-                'name': user_name,
-            })
+        context['in_shop_list'] = domain_user.shopping_list()
+        context['in_favorite'] = domain_user.favorites()
+        context['counter'] = domain.amount_of_purchases(request.user)
+        context['name'] = user_name
+
+    return render(request, 'authorRecipe.html', context)
 
 
 @login_required
 @csrf_exempt
 def profile_follow(request):
     authors = [
-        f.author for f in
-        Follow.objects.values_list('author', flat=True).filter(
-            user=request.user)
-    ]
+        f.author for f in Follow.objects.filter(user=request.user).all()
+    ]  # list must contain query objects, not just values (ids),
+    # for paginator working correct
     recipes_from_author_id = {
         a.id: Recipe.objects.filter(author__exact=a)[:3]
         for a in authors
@@ -237,6 +232,7 @@ def profile_follow(request):
     counter = domain.amount_of_purchases(request.user)
     return render(
         request, 'myFollow.html', {
+            'is_user_authenticated': True,
             'authors': authors,
             'recipes_from_author_id': recipes_from_author_id,
             'recipe_count_from_author_id': recipe_count_from_author_id,
@@ -273,6 +269,7 @@ def purchases_list(request):
     image = Recipe.image
     counter = domain.amount_of_purchases(request.user)
     return render(request, 'shopList.html', {
+        'is_user_authenticated': True,
         'recipes': recipes,
         'image': image,
         'counter': counter,
@@ -338,16 +335,18 @@ def favorite_recipes(request):
     page_number = domain.get_page_content(request)
     page = paginator.get_page(page_number)
     in_shop_list = domain_user.shopping_list()
-    return render(
-        request, 'favorite.html', {
-            'recipes': recipes,
-            'page': page,
-            'paginator': paginator,
-            'image': image,
-            'in_shop_list': in_shop_list,
-            'in_favorite': favorite_recipe_ids,
-            'counter': counter,
-        })
+    context = {
+        'recipes': recipes,
+        'page': page,
+        'paginator': paginator,
+        'image': image,
+        'is_user_authenticated': request.user.is_authenticated,
+        'in_shop_list': in_shop_list,
+        'in_favorite': favorite_recipe_ids,
+        'counter': counter,
+    }
+
+    return render(request, 'favorite.html', context)
 
 
 class Subscriptions(LoginRequiredMixin, View):

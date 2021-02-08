@@ -13,6 +13,7 @@ def logout_view(request):
 
 
 class PasswordsChangeView(PasswordChangeView):
+    extra_context = {'is_user_authenticated': True}
     form_class = PasswordChangingForm
     success_url = reverse_lazy('password_success')
 

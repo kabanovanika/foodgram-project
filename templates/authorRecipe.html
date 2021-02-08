@@ -1,72 +1,42 @@
-<!doctype html>
-<html lang="en">
+{% extends "base.html" %}
+{% load static %}
+{% csrf_token %}
 {% load user_filters %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Рецепты</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
-</head>
-<body class="body">
-  <header class="header">
-      <nav class="nav">
-          <div class="nav__container container">
-              <ul class="nav__items list">
-                  <li class="nav__item nav__item_active"><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
-                  <li class="nav__item"><a href="{% url 'profile_follow' %}" class="nav__link link" >Мои подписки</a></li>
-                  <li class="nav__item"><a href="{% url 'new_recipe' %}" class="nav__link link">Создать рецепт</a></li>
-                  <li class="nav__item"><a href="{% url 'favorite_recipes' %}" class="nav__link link">Избранное</a></li>
-                  <li class="nav__item"><a href="{% url 'purchases_list' %}" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter">{{ counter }}</span></li>
 
-              </ul>
-              <ul class="nav__items list">
-                 <li class="nav__item"><a href="{% url 'change_password' %}" class="nav__link link">Изменить пароль</a></li>
-                  <li class="nav__item"><a href="{% url 'logout'%}" class="nav__link link">Выход</a></li>
-              </ul>
-          </div>
-      </nav>
-  </header>
-    <main class="main container">
-        <div class="main__header">
-            <h1 class="main__title">{{ name }}</h1>
-             {% include "tags.html" %}
-        </div>
-        {% if request.user.id != user_id %}
-        <div class="author-subscribe" data-author="{{ user_id }}">
-        {% if following %}
-          <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue" name="subscribe">Отписаться от автора</button></p>
-        {% else %}
-            <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue" name="subscribe" data-out >Подписаться на автора</button></p>
-            {% endif %}
-        </div>
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="main__header">
+        <h1 class="main__title">{{ name }}</h1>
+        {% include "tags.html" %}
+    </div>
+    {% if is_user_authenticated %}
+    {% if request.user.id != user_id %}
+    <div class="author-subscribe" data-author="{{ user_id }}">
+    {% if following %}
+      <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue" name="subscribe">Отписаться от автора</button></p>
+    {% else %}
+        <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue" name="subscribe" data-out >Подписаться на автора</button></p>
         {% endif %}
+    </div>
+    {% endif %}
+    {% endif %}
 
+    <div class="card-list">
+        {% for recipe in page %}
+        {% include "recipe_on_page.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite is_user_authenticated=is_user_authenticated %}
+        {% endfor %}
+    </div>
 
-        <div class="card-list">
+    {% if page.has_other_pages %}
+        {% include "paginator.html" with items=page paginator=paginator %}
+    {% endif %}
+{% endblock %}
 
-            {% for recipe in page %}
-                {% include "recipe_on_page.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite %}
-            {% endfor %}
+{% block extra_scripts %}
+    <script src="{% static 'js/components/AuthorRecipe.js' %}"></script>
+    <script src="{% static 'authorRecipe.js' %}"></script>
+{% endblock %}
 
-        </div>
-        {% if page.has_other_pages %}
-            {% include "paginator.html" with items=page paginator=paginator %}
-        {% endif %}
-    </main>
-{% include "footer.html" %}  <script src="{% static 'js/components/MainCards.js' %}"></script>
-
-  <script src="{% static 'js/components/Purchases.js' %}"></script>
-  <script src="{% static 'js/components/Favorites.js' %}"></script>
-  <script src="{% static 'js/components/Subscribe.js' %}"></script>
-
-  <script src="{% static 'js/config/config.js' %}"></script>
-  <script src="{% static 'js/components/AuthorRecipe.js' %}"></script>
-  <script src="{% static 'js/components/Header.js' %}"></script>
-
-  <script src="{% static 'js/api/Api.js' %}"></script>
-  <script src="{% static 'authorRecipe.js' %}"></script>
-</body>
-</html>

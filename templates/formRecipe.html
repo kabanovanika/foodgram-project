@@ -1,45 +1,24 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Создание рецепта</title>
-       {% load static %}
-    <link rel="stylesheet" href="{% static 'pages/form.css' %}">
-</head>
-<body class="body">
-<header class="header">
-    <nav class="nav">
-        <div class="nav__container container">
-            <ul class="nav__items list">
-                <li class="nav__item"><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
-                <li class="nav__item"><a href="{% url 'profile_follow' %}" class="nav__link link" >Мои подписки</a></li>
-                <li class="nav__item nav__item_active"><a href="{% url 'new_recipe' %}" class="nav__link link">Создать рецепт</a></li>
-                <li class="nav__item"><a href="{% url 'favorite_recipes' %}" class="nav__link link">Избранное</a></li>
-                <li class="nav__item"><a href="{% url 'purchases_list' %}" class="nav__link link">Список покупок</a> <span class="badge badge_style_blue nav__badge" id="counter">{{ counter }}</span></li>
+{% extends "base.html" %}
+{% load static %}
+{% csrf_token %}
 
-            </ul>
-            <ul class="nav__items list">
-               <li class="nav__item"><a href="{% url 'change_password' %}" class="nav__link link">Изменить пароль</a></li>
-                <li class="nav__item"><a href="{% url 'logout'%}" class="nav__link link">Выход</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
-<main class="main container">
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'pages/form.css' %}">
+{% endblock %}
+
+{% block content %}
     <div class="main__header">
         <h1 class="main__title">Создание рецепта</h1>
     </div>
-      {% if form.errors %}
-                    {% for error in form.errors %}
-                        <div class="alert alert-danger" role="alert">
-                            {{ error|escape }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-    <div class="form-container">
+  {% if form.errors %}
+            {% for error in form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error|escape }}
+                </div>
+            {% endfor %}
+    {% endif %}
+
+        <div class="form-container">
     <form class="form" method="post" action="{% url 'new_recipe' %}" enctype='multipart/form-data'>
             {% csrf_token %}
             <div class="form__group">
@@ -113,14 +92,10 @@
             </div>
         </form>
     </div>
+{% endblock %}
 
+{% block extra_scripts %}
+    <script src="{% static 'js/utils/debouncing.js' %}"></script>
+    <script src="{% static 'formRecipe.js' %}"></script>
+{% endblock %}
 
-</main>
-{% include "footer.html" %}
-<script src="{% static 'js/config/config.js' %}"></script>
-<script src="{% static 'js/components/Header.js' %}"></script>
-<script src="{% static 'js/utils/debouncing.js' %}"></script>
-<script src="{% static 'js/api/Api.js' %}"></script>
-<script src="{% static 'formRecipe.js' %}"></script>
-</body>
-</html>
