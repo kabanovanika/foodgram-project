@@ -1,11 +1,12 @@
+{% load user_filters %}
 <nav class="nav">
     <div class="nav__container container">
         <ul class="nav__items list">
-          <li class="nav__item nav__item_active"><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
-          <li class="nav__item"><a href="{% url 'profile_follow'%}" class="nav__link link" >Мои подписки</a></li>
-          <li class="nav__item"><a href="{% url 'new_recipe' %}" class="nav__link link">Создать рецепт</a></li>
-          <li class="nav__item"><a href="{% url 'favorite_recipes' %}" class="nav__link link">Избранное</a></li>
-          <li class="nav__item"><a href="{% url 'purchases_list' %}" class="nav__link link">Список покупок</a><span class="badge badge_style_blue nav__badge" id="counter">{{ counter }}</span></li>
+          <li class="nav__item {% active_button 'index' request.resolver_match.url_name %} "><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
+          <li class="nav__item {% active_button 'profile_follow' request.resolver_match.url_name %} "><a href="{% url 'profile_follow'%}" class="nav__link link" >Мои подписки</a></li>
+          <li class="nav__item {% active_button 'new_recipe' request.resolver_match.url_name %} "><a href="{% url 'new_recipe' %}" class="nav__link link">Создать рецепт</a></li>
+          <li class="nav__item {% active_button 'favorite_recipes' request.resolver_match.url_name %} "><a href="{% url 'favorite_recipes' %}" class="nav__link link">Избранное</a></li>
+          <li class="nav__item {% active_button 'purchases_list' request.resolver_match.url_name %} "><a href="{% url 'purchases_list' %}" class="nav__link link">Список покупок</a><span class="badge badge_style_blue nav__badge" id="counter">{% amount_of_purchases request.user %}</span></li>
 
         </ul>
         <ul class="nav__items list">

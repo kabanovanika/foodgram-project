@@ -1,5 +1,7 @@
 from django import template
 
+from recipe.models import ShoppingList
+
 register = template.Library()
 
 
@@ -22,3 +24,19 @@ def query_transform(request, **kwargs):
 @register.filter
 def lookup(dictionary, key):
     return dictionary.get(key)
+
+
+@register.simple_tag
+def amount_of_purchases(user):
+    counter = ShoppingList.objects.values_list('purchase_recipe_id',
+                                               flat=True).filter(user_id=user)
+    amount = counter.count()
+    if amount == 0:
+        amount = ''
+    return amount
+
+
+@register.simple_tag
+def active_button(path_name, url_name):
+    if path_name in url_name:
+        return 'nav__item_active'

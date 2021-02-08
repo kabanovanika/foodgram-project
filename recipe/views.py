@@ -48,6 +48,7 @@ def get_ingredients(request):
 
 
 def index(request):
+    print(request.get_full_path())
     image = Recipe.image
     filter_values = domain.get_filter_values(request)
     tags = []
@@ -69,14 +70,12 @@ def index(request):
         domain_user = DomainUser(request.user.id)
         context['in_shop_list'] = domain_user.shopping_list()
         context['in_favorite'] = domain_user.favorites()
-        context['counter'] = domain.amount_of_purchases(request.user)
 
     return render(request, 'index.html', context)
 
 
 @login_required
 def new_recipe(request):
-    counter = domain.amount_of_purchases(request.user)
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     ingredients = domain.get_ingredients_for_recipe_form(request.POST)
     if form.is_valid():
@@ -96,7 +95,6 @@ def new_recipe(request):
         return redirect('login')
     return render(request, 'formRecipe.html', {
         'form': form,
-        'counter': counter,
         'is_user_authenticated': request.user.is_authenticated,
     })
 
@@ -126,7 +124,6 @@ def recipe_page(request, recipe_id):
         context['in_shop_list'] = domain.recipe_in_shop_list(request.user,
                                                              recipe.id)
         context['following'] = domain_user.is_following(author=author)
-        context['counter'] = domain.amount_of_purchases(request.user)
 
     return render(request, 'singlePage.html', context)
 
@@ -195,7 +192,6 @@ def profile(request, username):
         domain_user = DomainUser(request.user.id)
         context['in_shop_list'] = domain_user.shopping_list()
         context['in_favorite'] = domain_user.favorites()
-        context['counter'] = domain.amount_of_purchases(request.user)
         context['name'] = user_name
 
     return render(request, 'authorRecipe.html', context)
@@ -219,7 +215,6 @@ def profile_follow(request):
     paginator = Paginator(authors, settings.ITEMS_PER_PAGE)
     page_number = domain.get_page_content(request)
     page = paginator.get_page(page_number)
-    counter = domain.amount_of_purchases(request.user)
     return render(
         request, 'myFollow.html', {
             'is_user_authenticated': True,
@@ -228,7 +223,6 @@ def profile_follow(request):
             'recipe_count_from_author_id': recipe_count_from_author_id,
             'page': page,
             'paginator': paginator,
-            'counter': counter,
         })
 
 
@@ -257,12 +251,10 @@ def purchases_list(request):
         'purchase_recipe_id', flat=True).filter(user__exact=request.user)
     recipes = Recipe.objects.filter(id__in=recipes_id)
     image = Recipe.image
-    counter = domain.amount_of_purchases(request.user)
     return render(request, 'shopList.html', {
         'is_user_authenticated': True,
         'recipes': recipes,
         'image': image,
-        'counter': counter,
     })
 
 
@@ -311,7 +303,6 @@ class Favorites(LoginRequiredMixin, View):
 
 
 def favorite_recipes(request):
-    counter = domain.amount_of_purchases(request.user)
     domain_user = DomainUser(request.user.id)
     favorite_recipe_ids = domain_user.favorites()
     filter_values = domain.get_filter_values(request)
@@ -333,7 +324,6 @@ def favorite_recipes(request):
         'is_user_authenticated': request.user.is_authenticated,
         'in_shop_list': in_shop_list,
         'in_favorite': favorite_recipe_ids,
-        'counter': counter,
     }
 
     return render(request, 'favorite.html', context)

@@ -55,15 +55,6 @@ def recipe_in_shop_list(user_id, recipe_id):
         user_id__exact=user_id, purchase_recipe_id__exact=recipe_id).exists()
 
 
-def amount_of_purchases(user):
-    counter = ShoppingList.objects.values_list('purchase_recipe_id',
-                                               flat=True).filter(user_id=user)
-    amount = counter.count()
-    if amount == 0:
-        amount = ''
-    return amount
-
-
 def get_filter_values(request):
     filter_values = [f for f in EVERY_TAG if request.GET.get(f) == 'off']
     return filter_values
