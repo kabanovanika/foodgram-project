@@ -16,12 +16,12 @@ UserAdmin.list_filter = (('email', DropdownFilter), ('username',
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('author', 'name', 'text', 'image')
-    list_filter = (('name', DropdownFilter),)
+    list_filter = (('name', DropdownFilter), )
 
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('title', 'dimension')
-    list_filter = (('title', DropdownFilter),)
+    list_filter = (('title', DropdownFilter), )
 
 
 class RecipeIngredientAdmin(admin.ModelAdmin):

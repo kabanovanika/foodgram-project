@@ -28,7 +28,7 @@ class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
         fields = ('name', 'text', 'image', 'tags', 'cooking_time')
-        exclude = ('ingredients',)
+        exclude = ('ingredients', )
         help_texts = {
             'name': 'Название рецепта',
             'text': 'Описание рецепта',

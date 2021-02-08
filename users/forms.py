@@ -14,14 +14,16 @@ class SignUpForm(UserCreationForm):
     password1 = forms.CharField(max_length=100,
                                 label='Пароль',
                                 widget=forms.PasswordInput(
-                                    attrs={'placeholder': '********',
-                                           'class': 'form__input',
-                                           'type': 'password',
-                                           'data-toggle': 'password'}),
+                                    attrs={
+                                        'placeholder': '********',
+                                        'class': 'form__input',
+                                        'type': 'password',
+                                        'data-toggle': 'password'
+                                    }),
                                 help_text='Ваш пароль должен содержать '
-                                          'не менее 8 символов.'
-                                          'Ваш пароль не должен совпадать с '
-                                          'логином.')
+                                'не менее 8 символов.'
+                                'Ваш пароль не должен совпадать с '
+                                'логином.')
     password2 = None
 
     class Meta(UserCreationForm.Meta):

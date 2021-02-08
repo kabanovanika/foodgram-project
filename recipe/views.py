@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 
 from foodgram import settings
+
 from . import domain
 from .domain.user import DomainUser
 from .forms import RecipeForm
@@ -30,16 +31,17 @@ def server_error(request):
     return render(request, 'misc/500.html', status=500)
 
 
-@api_view(('GET',))
+@api_view(('GET', ))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def get_ingredients(request):
     query = request.GET.get('query')
     queryset = Ingredient.objects.filter(title__startswith=query)
     ing_list = []
     if not queryset.exists():
-        ing_list = [
-            {'title': 'Такого ингредиента не существует', 'dimension': ''}
-        ]
+        ing_list = [{
+            'title': 'Такого ингредиента не существует',
+            'dimension': ''
+        }]
         return JsonResponse(ing_list, safe=False)
     for item in queryset:
         dict_response = {'title': item.title, 'dimension': item.dimension}
@@ -119,10 +121,10 @@ def recipe_page(request, recipe_id):
 
     if request.user.is_authenticated:
         domain_user = DomainUser(request.user.id)
-        context['is_favorite'] = domain.recipe_is_favorite(request.user,
-                                                           recipe.id)
-        context['in_shop_list'] = domain.recipe_in_shop_list(request.user,
-                                                             recipe.id)
+        context['is_favorite'] = domain.recipe_is_favorite(
+            request.user, recipe.id)
+        context['in_shop_list'] = domain.recipe_in_shop_list(
+            request.user, recipe.id)
         context['following'] = domain_user.is_following(author=author)
 
     return render(request, 'singlePage.html', context)
@@ -185,7 +187,6 @@ def profile(request, username):
         'image': image,
         'is_user_authenticated': request.user.is_authenticated,
         'user_id': user_id,
-
     }
 
     if request.user.is_authenticated:
@@ -200,9 +201,8 @@ def profile(request, username):
 @login_required
 @csrf_exempt
 def profile_follow(request):
-    authors = [
-        f.author for f in Follow.objects.filter(user=request.user)
-    ]  # list must contain query objects, not just values (ids),
+    authors = [f.author for f in Follow.objects.filter(user=request.user)
+               ]  # list must contain query objects, not just values (ids),
     # for paginator working correct
     recipes_from_author_id = {
         a.id: Recipe.objects.filter(author__exact=a)[:3]

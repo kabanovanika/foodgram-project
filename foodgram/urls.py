@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
 from django.contrib.flatpages import views
+from django.urls import include, path
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls')),
@@ -10,7 +10,8 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('', include('recipe.urls')),
     path('foodgram-page/', views.flatpage, name='foodgram'),
-    path('about-author/', views.flatpage, {'url': '/about-us/'},
+    path('about-author/',
+         views.flatpage, {'url': '/about-us/'},
          name='about_author'),
     path('technologies-page/', views.flatpage, name='technologies'),
 ]
