@@ -19,9 +19,6 @@ from .forms import RecipeForm
 from .models import (Favorite, Follow, Ingredient, Recipe, RecipeIngredient,
                      ShoppingList, Tag, User)
 
-handler404 = 'recipe.views.page_not_found'
-handler500 = 'recipe.views.server_error'
-
 
 def page_not_found(request, exception):
     return render(request, 'misc/404.html', {'path': request.path}, status=404)
@@ -31,26 +28,25 @@ def server_error(request):
     return render(request, 'misc/500.html', status=500)
 
 
-@api_view(('GET', ))
+@api_view(('GET',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def get_ingredients(request):
     query = request.GET.get('query')
     queryset = Ingredient.objects.filter(title__startswith=query)
-    ing_list = []
+    ingredient_list = []
     if not queryset.exists():
-        ing_list = [{
+        ingredient_list = [{
             'title': 'Такого ингредиента не существует',
             'dimension': ''
         }]
-        return JsonResponse(ing_list, safe=False)
+        return JsonResponse(ingredient_list, safe=False)
     for item in queryset:
         dict_response = {'title': item.title, 'dimension': item.dimension}
-        ing_list.append(dict_response)
-    return JsonResponse(ing_list, safe=False)
+        ingredient_list.append(dict_response)
+    return JsonResponse(ingredient_list, safe=False)
 
 
 def index(request):
-    print(request.get_full_path())
     image = Recipe.image
     filter_values = domain.get_filter_values(request)
     tags = []
@@ -201,18 +197,18 @@ def profile(request, username):
 @login_required
 @csrf_exempt
 def profile_follow(request):
-    authors = [f.author for f in Follow.objects.filter(user=request.user)
-               ]  # list must contain query objects, not just values (ids),
-    # for paginator working correct
+    authors_queryset = Follow.objects.values_list('author', flat=True).filter(
+        user=request.user).order_by('-id')
+    authors = [f for f in authors_queryset]
     recipes_from_author_id = {
-        a.id: Recipe.objects.filter(author__exact=a)[:3]
-        for a in authors
+        author: Recipe.objects.filter(author__exact=author)[:3]
+        for author in authors
     }
     recipe_count_from_author_id = {
-        a.id: Recipe.objects.filter(author__exact=a).count() - 3
-        for a in authors
+        author: Recipe.objects.filter(author__exact=author).count() - 3
+        for author in authors
     }
-    paginator = Paginator(authors, settings.ITEMS_PER_PAGE)
+    paginator = Paginator(authors_queryset, settings.ITEMS_PER_PAGE)
     page_number = domain.get_page_content(request)
     page = paginator.get_page(page_number)
     return render(
@@ -228,8 +224,8 @@ def profile_follow(request):
 
 class Purchases(LoginRequiredMixin, View):
     def post(self, request):
-        reg = json.loads(request.body)
-        recipe_id = reg.get('id')
+        request_data = json.loads(request.body)
+        recipe_id = request_data.get('id')
         if recipe_id is not None:
             recipe = get_object_or_404(Recipe, id__exact=recipe_id)
             ShoppingList.objects.get_or_create(user=request.user,
@@ -266,14 +262,14 @@ def shop_list_file(request):
         RecipeIngredient.objects.filter(recipe__in=recipes).values(
             'ingredient_id', 'amount'))
     shop_dict = defaultdict(int)
-    for i in range(len(raw_shop_list)):
-        k = raw_shop_list[i]['ingredient_id']
-        v = raw_shop_list[i]['amount']
-        shop_dict[k] += v
+    for item in range(len(raw_shop_list)):
+        ingredient_id = raw_shop_list[item]['ingredient_id']
+        ingredient_amount = raw_shop_list[item]['amount']
+        shop_dict[ingredient_id] += ingredient_amount
     final_shop_list = ['Список продуктов:']
-    for k, v in shop_dict.items():
-        ingredient = get_object_or_404(Ingredient, id__exact=k)
-        full_ingredient_info = (f'{ingredient} - {v}'
+    for ingredient_id, ingredient_amount in shop_dict.items():
+        ingredient = get_object_or_404(Ingredient, id__exact=ingredient_id)
+        full_ingredient_info = (f'{ingredient} - {ingredient_amount}'
                                 f' ({ingredient.dimension})')
         final_shop_list.append(full_ingredient_info)
     file_data = '\n'.join(final_shop_list)
@@ -285,8 +281,8 @@ def shop_list_file(request):
 
 class Favorites(LoginRequiredMixin, View):
     def post(self, request):
-        reg = json.loads(request.body)
-        recipe_id = reg.get('id')
+        request_data = json.loads(request.body)
+        recipe_id = request_data.get('id')
         if recipe_id is not None:
             recipe = get_object_or_404(Recipe, id__exact=recipe_id)
             Favorite.objects.get_or_create(user=request.user,
@@ -331,8 +327,8 @@ def favorite_recipes(request):
 
 class Subscriptions(LoginRequiredMixin, View):
     def post(self, request):
-        reg = json.loads(request.body)
-        user_id = reg.get('id')
+        request_data = json.loads(request.body)
+        user_id = request_data.get('id')
         if user_id is not None:
             author = get_object_or_404(User, id__exact=user_id)
             if request.user != author:

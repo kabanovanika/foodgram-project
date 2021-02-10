@@ -1,4 +1,6 @@
 <div class="card" data-id="{{ recipe.id }}">
+    <!--        token here is necessary due to POST requests in favorites and purchases -->
+
     {% csrf_token %}
     {% load thumbnail %}
     {% thumbnail recipe.image "960x339" crop="center" upscale=True as im %}
@@ -36,7 +38,7 @@
         <button class="button button_style_none" name="favorites"><span
                 class="icon-favorite icon-favorite_active"></span></button>
         {% else %}
-        <button class="button button_style_none" name="favorites" data-out>{% csrf_token %}
+        <button class="button button_style_none" name="favorites" data-out>
             <span class="icon-favorite"></span>
             {% endif %}
         </button>

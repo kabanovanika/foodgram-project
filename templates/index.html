@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "includes/base.html" %}
 {% load static %}
-{% csrf_token %}
+
 
 {% block extra_styles %}
 <link rel="stylesheet" href="{% static 'pages/index.css' %}">
@@ -9,17 +9,17 @@
 {% block content %}
     <div class="main__header">
         <h1 class="main__title">Рецепты</h1>
-        {% include "tags.html" %}
+        {% include "includes/tags.html" %}
     </div>
 
     <div class="card-list">
         {% for recipe in page %}
-        {% include "recipe_on_page.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite is_user_authenticated=is_user_authenticated %}
+        {% include "includes/recipe_on_page.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite is_user_authenticated=is_user_authenticated %}
         {% endfor %}
     </div>
 
     {% if page.has_other_pages %}
-        {% include "paginator.html" with items=page paginator=paginator %}
+        {% include "includes/paginator.html" with items=page paginator=paginator %}
     {% endif %}
 {% endblock %}
 

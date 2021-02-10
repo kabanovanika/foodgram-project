@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "includes/base.html" %}
 {% block header %}
 <nav class="nav">
         <div class="nav__container container">
@@ -9,7 +9,6 @@
     </nav>
 {% endblock %}
 {% load static %}
-{% csrf_token %}
 {% load user_filters %}
 
 {% block extra_styles %}

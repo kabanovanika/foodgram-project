@@ -1,9 +1,5 @@
-{% extends "base.html" %}
+{% extends "includes/base.html" %}
 {% load static %}
-
-{% block title %}
-<title>{{ recipe.name }}</title>
-{% endblock %}
 
 {% block extra_styles %}
 <link rel="stylesheet" href="{% static 'pages/single.css' %}">
@@ -18,6 +14,8 @@
             <div class="single-card__header-info">
                 <h1 class="single-card__title">{{ recipe.name }}</h1>
                 {% if is_user_authenticated %}
+<!--        token here is necessary due to POST requests in favorites and purchases -->
+                {% csrf_token %}
                 <div class="single-card__favorite">
                     {% if is_favorite %}
                     <button class="button button_style_none" name="favorites">
@@ -25,7 +23,7 @@
                     </button>
                     {% else %}
                     <button class="button button_style_none" name="favorites"
-                            data-out> {% csrf_token %}<span
+                            data-out><span
                             class="icon-favorite icon-favorite_big"></span>
                     </button>
                     <div class="single-card__favorite-tooltip tooltip">Добавить

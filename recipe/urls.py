@@ -2,6 +2,7 @@ from django.urls import path
 
 from . import views
 
+# api.js URLs are open, otherwise they don't work
 urlpatterns = (
     path('subscriptions', views.Subscriptions.as_view(), name='my_follow'),
     path('subscriptions/<int:author>',
