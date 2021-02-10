@@ -1,0 +1,15 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="custom-center-block">
+            <p class="custom-text-block">Ошибка 404</p>
+            <p class="custom-text-block">Страница {{ path }} не найдена</p>
+        <div class="custom-button-block">
+            <button type=submit class="button button_style_blue"><a href="{% url 'index' %}" class="nav__link link" >Перейти на главную</a></button>
+        </div>
+    </div>{% endblock %}

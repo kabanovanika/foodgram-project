@@ -3,7 +3,7 @@
 {% load thumbnail %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
+    <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
     <div class="card-list card-list_column">
         <ul class="shopping-list">
             {% for recipe in recipes %}
-                <li class="shopping-list__item" data-id="{{recipe.id}}">
+                <li class="shopping-list__item" data-id="{{ recipe.id }}">
                     <div class="recipe recipe_reverse">
                         {% thumbnail recipe.image  "450x439" crop="center" upscale=True as im %}
                         <img  class="recipe__image" src="{{ im.url }}" alt="какой-то текст" />
@@ -24,6 +24,7 @@
                 <button methods="POST" class="shopping-list__button link">Удалить</button>
             </li>
             {% endfor %}
+        </ul>
         <a href="{% url 'download' %}"><button type=submit class="button button_style_blue">Скачать список</button></a>
     </div>
 {% endblock %}

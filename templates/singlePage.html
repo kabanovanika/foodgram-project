@@ -9,7 +9,7 @@
 <main class="main container">
     <div class="single-card" data-id="{{ recipe.id }}"
          data-author="{{ recipe.author.id }}">
-        <img src={{image.url}} alt="какой-то текст" class="single-card__image">
+        <img src="{{ image.url }}" alt="какой-то текст" class="single-card__image">
         <div class="single-card__info">
             <div class="single-card__header-info">
                 <h1 class="single-card__title">{{ recipe.name }}</h1>
@@ -99,8 +99,8 @@
                 <div class="single-card__items single-card__items_column">
                     {% for ingredient in ingredients %}
                         <p class=" single-card__section-item">
-                            {{ingredient.ingredient}} - {{ingredient.amount}}
-                            {{ingredient.ingredient.dimension}}</p>
+                            {{ ingredient.ingredient }} - {{ ingredient.amount }}
+                            {{ ingredient.ingredient.dimension }}</p>
                     {% endfor %}
                 </div>
             </div>
