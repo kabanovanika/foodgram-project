@@ -5,7 +5,7 @@
 
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
+    <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -21,21 +21,21 @@
         <div class="card-user__body">
             <ul class="card-user__items">
                 {% for recipe in recipes_from_author_id|lookup:author %}
-                <li class="card-user__item">
-                    <div class="recipe">
-                        {% thumbnail recipe.image  "350x339" crop="center" upscale=True as im %}
-                         <img  class="recipe__image" src="{{ im.url }}" alt="какой-то текст" />
-                        {% endthumbnail %}
-                        <h3 class="recipe__title">{{ recipe.name }}</h3>
-                        <p class="recipe__text"><span class="icon-time"></span>
-                            {{recipe.cooking_time }} минут</p>
-                    </div>
-                </li>
+                    <li class="card-user__item">
+                        <div class="recipe">
+                            {% thumbnail recipe.image  "350x339" crop="center" upscale=True as im %}
+                                <img  class="recipe__image" src="{{ im.url }}" alt="какой-то текст" />
+                            {% endthumbnail %}
+                            <h3 class="recipe__title">{{ recipe.name }}</h3>
+                            <p class="recipe__text"><span class="icon-time"></span>
+                                {{recipe.cooking_time }} минут</p>
+                        </div>
+                    </li>
                 {% endfor %}
                 {% if recipe_count_from_author_id|lookup:author > 0 %}
-                <li class="card-user__item">
-                    <a href="/{{ author }}/" class="card-user__link link">Еще рецептов: {{ recipe_count_from_author_id|lookup:author }} шт. </a>
-                </li>
+                    <li class="card-user__item">
+                        <a href="/{{ author }}/" class="card-user__link link">Еще рецептов: {{ recipe_count_from_author_id|lookup:author }} шт. </a>
+                    </li>
                 {% endif %}
 
             </ul>
@@ -50,11 +50,11 @@
     </div>
 
     {% if page.has_other_pages %}
-            {% include "includes/paginator.html" with items=page paginator=paginator %}
-        {% endif %}
+        {% include "includes/paginator.html" with items=page paginator=paginator %}
+    {% endif %}
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'js/components/MyFollow.js' %}"></script>
-<script src="{% static 'myFollow.js' %}"></script>
+    <script src="{% static 'js/components/MyFollow.js' %}"></script>
+    <script src="{% static 'myFollow.js' %}"></script>
 {% endblock extra_scripts %}

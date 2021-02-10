@@ -3,7 +3,7 @@
 
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'pages/index.css' %}">
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
 
     <div class="card-list">
         {% for recipe in page %}
-        {% include "includes/recipe_on_page.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite is_user_authenticated=is_user_authenticated %}
+            {% include "includes/recipe_on_page.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite is_user_authenticated=is_user_authenticated %}
         {% endfor %}
     </div>
 

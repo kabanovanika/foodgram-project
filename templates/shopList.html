@@ -13,14 +13,14 @@
     <div class="card-list card-list_column">
         <ul class="shopping-list">
             {% for recipe in recipes %}
-            <li class="shopping-list__item" data-id="{{recipe.id}}">
-                <div class="recipe recipe_reverse">
-                    {% thumbnail recipe.image  "450x439" crop="center" upscale=True as im %}
-                    <img  class="recipe__image" src="{{ im.url }}" alt="какой-то текст" />
-                    {% endthumbnail %}
-                    <h3 class="recipe__title">{{ recipe.name}}</h3>
-                    <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time}} мин.</p>
-                </div>
+                <li class="shopping-list__item" data-id="{{recipe.id}}">
+                    <div class="recipe recipe_reverse">
+                        {% thumbnail recipe.image  "450x439" crop="center" upscale=True as im %}
+                        <img  class="recipe__image" src="{{ im.url }}" alt="какой-то текст" />
+                        {% endthumbnail %}
+                        <h3 class="recipe__title">{{ recipe.name }}</h3>
+                        <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
+                    </div>
                 <button methods="POST" class="shopping-list__button link">Удалить</button>
             </li>
             {% endfor %}
@@ -29,6 +29,6 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'js/components/ShopList.js' %}"></script>
-<script src="{% static 'shopList.js' %}"></script>
+    <script src="{% static 'js/components/ShopList.js' %}"></script>
+    <script src="{% static 'shopList.js' %}"></script>
 {% endblock %}

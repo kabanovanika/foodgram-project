@@ -12,11 +12,11 @@
 <body class="body">
 <header class="header">
     {% block header %}
-    {% if is_user_authenticated %}
-    {% include "includes/navAuth.html" %}
-    {% else %}
-    {% include "includes/navNotAuth.html" %}
-    {% endif %}
+        {% if is_user_authenticated %}
+            {% include "includes/navAuth.html" %}
+        {% else %}
+            {% include "includes/navNotAuth.html" %}
+        {% endif %}
     {% endblock %}
 </header>
 <main class="main container">

@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'pages/form.css' %}">
+    <link rel="stylesheet" href="{% static 'pages/form.css' %}">
 {% endblock %}
 
 {% block content %}
-        {% if form.errors %}
+    {% if form.errors %}
         {% for error in form.errors %}
             <div class="alert alert-danger" role="alert">
                 {{ error|escape }}

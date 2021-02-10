@@ -3,7 +3,7 @@
 {% load user_filters %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'pages/index.css' %}">
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -12,20 +12,20 @@
         {% include "includes/tags.html" %}
     </div>
     {% if is_user_authenticated %}
-    {% if request.user.id != user_id %}
-    <div class="author-subscribe" data-author="{{ user_id }}">
-    {% if following %}
-      <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue" name="subscribe">Отписаться от автора</button></p>
-    {% else %}
-        <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue" name="subscribe" data-out >Подписаться на автора</button></p>
+        {% if request.user.id != user_id %}
+            <div class="author-subscribe" data-author="{{ user_id }}">
+            {% if following %}
+                <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue" name="subscribe">Отписаться от автора</button></p>
+            {% else %}
+                <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue" name="subscribe" data-out >Подписаться на автора</button></p>
+            {% endif %}
+            </div>
         {% endif %}
-    </div>
-    {% endif %}
     {% endif %}
 
     <div class="card-list">
         {% for recipe in page %}
-        {% include "includes/recipe_on_page.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite is_user_authenticated=is_user_authenticated %}
+            {% include "includes/recipe_on_page.html" with recipe=recipe in_shop_list=in_shop_list in_favorite=in_favorite is_user_authenticated=is_user_authenticated %}
         {% endfor %}
     </div>
 

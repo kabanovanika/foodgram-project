@@ -2,13 +2,13 @@
 <nav class="pagination" aria-label="Search results pages">
     <ul class="pagination__container">
         {% if items.has_previous %}
-        <li class="pagination__item"><a class="pagination__link link" href="?{% query_transform request page=items.previous_page_number %}"><span class="icon-left"></span></a></li>
+            <li class="pagination__item"><a class="pagination__link link" href="?{% query_transform request page=items.previous_page_number %}"><span class="icon-left"></span></a></li>
         {% else %}
-        <li class="pagination__item"><a class="pagination__link link" href="#"g><span class="icon-left"></span></a></li>
+            <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-left"></span></a></li>
         {% endif %}
         {% for i in paginator.page_range %}
             {% if items.number == i %}
-             <li class="pagination__item pagination__item_active"><a class="pagination__link link">{{ i }}</a></li>
+                <li class="pagination__item pagination__item_active"><a class="pagination__link link">{{ i }}</a></li>
             {% else %}
                 <li class="pagination__item"><a class="pagination__link link" href="?{% query_transform request page=i %}">{{ i }}</a></li>
             {% endif %}

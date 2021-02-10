@@ -3,7 +3,7 @@
 {% load user_filters %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'pages/form.css' %}">
+    <link rel="stylesheet" href="{% static 'pages/form.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -19,9 +19,9 @@
                     <div class="form__field-group">
                         {{ form.name|addclass:"form__input" }}
                         {% if form.errors %}
-                        {% for error in form.title.errors %}
-                        <span class="form__error">{{ error|escape }}</span>
-                        {% endfor %}
+                            {% for error in form.title.errors %}
+                            <span class="form__error">{{ error|escape }}</span>
+                            {% endfor %}
                         {% endif %}
                     </div>
                 </div>
@@ -87,9 +87,9 @@
                         {{ form.cooking_time|addclass:"form__input" }}
                         <label for="id_time" class="form__label">минут</label>
                         {% if form.errors %}
-                        {% for error in field.errors %}
-                        <span class="form__error">{{ error|escape }}</span>
-                        {% endfor %}
+                            {% for error in field.errors %}
+                                <span class="form__error">{{ error|escape }}</span>
+                            {% endfor %}
                         {% endif %}
                     </div>
                 </div>
@@ -98,9 +98,9 @@
                     <div class="form__field-group">
                         {{ form.text|addclass:"form__textarea" }}
                         {% if form.errors %}
-                        {% for error in field.errors %}
-                        <span class="form__error">{{ error|escape }}</span>
-                        {% endfor %}
+                            {% for error in field.errors %}
+                                <span class="form__error">{{ error|escape }}</span>
+                            {% endfor %}
                         {% endif %}
                     </div>
                 </div>
@@ -110,9 +110,9 @@
                         {{ form.image|addclass:"form__file-button" }}
                         <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" class="form__file">
                         {% if form.errors %}
-                        {% for error in field.errors %}
-                        <span class="form__error">{{ error|escape }}</span>
-                        {% endfor %}
+                            {% for error in field.errors %}
+                            <span class="form__error">{{ error|escape }}</span>
+                            {% endfor %}
                         {% endif %}
                     </div>
                 </div>
