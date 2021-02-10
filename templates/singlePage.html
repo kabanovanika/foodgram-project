@@ -1,6 +1,7 @@
 {% extends "includes/base.html" %}
 {% load static %}
 
+{% block title %}{{ recipe.name }}{% endblock %}
 {% block extra_styles %}
 <link rel="stylesheet" href="{% static 'pages/single.css' %}">
 {% endblock %}
