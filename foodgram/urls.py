@@ -21,3 +21,6 @@ if settings.DEBUG:
                           document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL,
                           document_root=settings.STATIC_ROOT)
+
+handler404 = 'recipe.views.page_not_found'
+handler500 = 'recipe.views.server_error'
