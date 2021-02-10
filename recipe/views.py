@@ -28,7 +28,7 @@ def server_error(request):
     return render(request, 'misc/500.html', status=500)
 
 
-@api_view(('GET',))
+@api_view(('GET', ))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def get_ingredients(request):
     query = request.GET.get('query')
@@ -197,8 +197,8 @@ def profile(request, username):
 @login_required
 @csrf_exempt
 def profile_follow(request):
-    authors_queryset = Follow.objects.values_list('author', flat=True).filter(
-        user=request.user).order_by('-id')
+    authors_queryset = Follow.objects.values_list(
+        'author', flat=True).filter(user=request.user).order_by('-id')
     authors = [f for f in authors_queryset]
     recipes_from_author_id = {
         author: Recipe.objects.filter(author__exact=author)[:3]
