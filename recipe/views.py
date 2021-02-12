@@ -20,7 +20,7 @@ from .models import (Favorite, Follow, Ingredient, Recipe, RecipeIngredient,
                      ShoppingList, Tag, User)
 
 
-@api_view(('GET', ))
+@api_view(('GET',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def get_ingredients(request):
     query = request.GET.get('query')
@@ -44,6 +44,7 @@ def index(request):
     tags = []
     if filter_values:
         tags = Tag.objects.exclude(slug__in=filter_values)
+    print(tags)
     recipes = domain.get_recipes_with_tags(tags)
     paginator = Paginator(recipes, settings.ITEMS_PER_PAGE)
     page_number = domain.get_page_content(request)

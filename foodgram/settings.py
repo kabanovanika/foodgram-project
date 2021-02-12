@@ -8,14 +8,13 @@ SECRET_KEY = 'g#lycu-s*p)0o%chhui*i$+#us$zkw3u^!)4-_jb_5!7t-osvw'
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    '130.193.42.192',
     '0.0.0.0',
     'localhost',
     '127.0.0.1',
     '[::1]',
 ]
 
-# ALLOWED_HOSTS = ['*']
-# APPEND_SLASH = False
 
 ITEMS_PER_PAGE = 6
 
@@ -81,12 +80,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -119,7 +112,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

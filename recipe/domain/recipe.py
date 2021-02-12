@@ -40,8 +40,7 @@ def get_recipes_with_tags(tags: List[str],
         query = query.filter(author=author_id)
 
     if tags:
-        return query.filter(tags__in=tags)
-
+        return query.filter(tags__in=tags).distinct()
     return query.all()
 
 

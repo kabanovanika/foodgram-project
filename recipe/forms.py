@@ -35,6 +35,7 @@ class RecipeForm(forms.ModelForm):
         }
         labels = {
             'name': 'Название рецепта',
+            'text': 'Описание рецепта',
             'tag': 'Теги',
             'ingredients': 'Ингредиенты',
             'cooking_time': 'Время приготовления',

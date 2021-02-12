@@ -4,11 +4,11 @@
     <li class="tags__item">
         {% if 'breakfast=off' in request.get_full_path %}
             <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange" href="?{% query_transform request breakfast=None %}"></a>
-            <span class="tags__label">Завтрак</span>
+            <span for="breakfast" class="tags__label">Завтрак</span>
         {% else %}
             <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="?{% query_transform request breakfast='off'%}"></a>
-            <span class="tags__label">Завтрак</span>
-        {% endif%}
+            <span for="breakfast" class="tags__label">Завтрак</span>
+        {% endif %}
     </li>
     <li class="tags__item">
         {% if 'lunch=off' in request.get_full_path %}
@@ -17,7 +17,7 @@
         {% else %}
             <a id="lunch" class="tags__checkbox tags__checkbox_style_green tags__checkbox_active" href="?{% query_transform request lunch='off' %}"></a>
             <span for="lunch" class="tags__label">Обед</span>
-        {% endif%}
+        {% endif %}
     </li>
     <li class="tags__item">
         {% if 'dinner=off' in request.get_full_path %}
@@ -26,6 +26,6 @@
         {% else %}
             <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="?{% query_transform request dinner='off' %}"></a>
             <label for="dinner" class="tags__label">Ужин</label>
-        {% endif%}
+        {% endif %}
     </li>
 </ul>
