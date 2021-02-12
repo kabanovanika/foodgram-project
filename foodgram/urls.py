@@ -22,5 +22,5 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,
                           document_root=settings.STATIC_ROOT)
 
-handler404 = 'recipe.views.page_not_found'
-handler500 = 'recipe.views.server_error'
+handler404 = 'foodgram.views.page_not_found'
+handler500 = 'foodgram.views.server_error'
