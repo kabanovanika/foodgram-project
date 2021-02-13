@@ -29,7 +29,7 @@ services:
             - ./.env
 
     web:
-        image: 758493/foodgram:v4
+        image: 758493/foodgram:v7
         restart: always
         volumes:
             - static_volume:/code/static

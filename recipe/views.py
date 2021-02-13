@@ -44,7 +44,6 @@ def index(request):
     tags = []
     if filter_values:
         tags = Tag.objects.exclude(slug__in=filter_values)
-    print(tags)
     recipes = domain.get_recipes_with_tags(tags)
     paginator = Paginator(recipes, settings.ITEMS_PER_PAGE)
     page_number = domain.get_page_content(request)
@@ -190,9 +189,8 @@ def profile(request, username):
 @login_required
 @csrf_exempt
 def profile_follow(request):
-    authors_queryset = Follow.objects.values_list(
-        'author', flat=True).filter(user=request.user).order_by('-id')
-    authors = [f for f in authors_queryset]
+    authors_queryset = Follow.objects.filter(user=request.user)
+    authors = [f.author for f in authors_queryset]
     recipes_from_author_id = {
         author: Recipe.objects.filter(author__exact=author)[:3]
         for author in authors
