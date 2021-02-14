@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 from django.db import models
 
 User = get_user_model()
@@ -33,7 +34,7 @@ class Recipe(models.Model):
                                          through_fields=('recipe',
                                                          'ingredient'))
     tags = models.ManyToManyField(Tag, related_name='recipes')
-    cooking_time = models.IntegerField(default=0)
+    cooking_time = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     pub_date = models.DateTimeField('date published', auto_now_add=True)
 
     class Meta:
@@ -50,7 +51,7 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe,
                                on_delete=models.CASCADE,
                                related_name='recipes')
-    amount = models.IntegerField()
+    amount = models.IntegerField(validators=[MinValueValidator(0)])
 
     def __str__(self):
         return (f'{self.ingredient.title} - {self.amount} '

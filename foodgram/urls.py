@@ -5,9 +5,9 @@ from django.contrib.flatpages import views
 from django.urls import include, path
 
 urlpatterns = [
-    path('', include('django.contrib.auth.urls')),
-    path('admin/', admin.site.urls),
-    path('auth/', include('users.urls')),
+    path('', include('django.contrib.auth.urls'), name='auth_urls'),
+    path('admin/', admin.site.urls, name='admin_urls'),
+    path('auth/', include('users.urls'), name='users_urls'),
     path('', include('recipe.urls')),
     path('foodgram-page/', views.flatpage, name='foodgram'),
     path('about-author/',

@@ -181,6 +181,7 @@ def profile(request, username):
         domain_user = DomainUser(request.user.id)
         context['in_shop_list'] = domain_user.shopping_list()
         context['in_favorite'] = domain_user.favorites()
+        context['following'] = domain_user.is_following(author=user_id)
         context['name'] = user_name
 
     return render(request, 'authorRecipe.html', context)

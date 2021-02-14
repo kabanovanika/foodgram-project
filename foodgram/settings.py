@@ -65,7 +65,7 @@ TEMPLATES = [
         },
     },
 ]
-SITE_ID = 2
+SITE_ID = 3
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
@@ -80,6 +80,12 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
