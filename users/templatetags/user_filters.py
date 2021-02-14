@@ -1,5 +1,6 @@
 from django import template
 
+from recipe.domain import conjugate_recipes
 from recipe.models import ShoppingList
 
 register = template.Library()
@@ -24,6 +25,11 @@ def query_transform(request, **kwargs):
 @register.filter
 def lookup(dictionary, key):
     return dictionary.get(key)
+
+
+@register.filter
+def conjugate_recipe_word(count):
+    return conjugate_recipes(count)
 
 
 @register.simple_tag

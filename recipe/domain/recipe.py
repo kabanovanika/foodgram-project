@@ -62,3 +62,18 @@ def get_filter_values(request):
 def get_page_content(request):
     page_number = request.GET.get('page')
     return page_number
+
+
+def conjugate_recipes(count: int) -> str:
+    remainder = count % 10
+
+    if count in (11, 12, 13, 14):
+        return 'рецептов'
+
+    if remainder == 1:
+        return 'рецепт'
+
+    if remainder in (2, 3, 4):
+        return 'рецепта'
+
+    return 'рецептов'

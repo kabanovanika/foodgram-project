@@ -35,7 +35,7 @@
                 {% endfor %}
                 {% if recipe_count_from_author_id|lookup:author.id > 0 %}
                     <li class="card-user__item">
-                        <a href="{% url 'profile' author %}" class="card-user__link link">Еще рецептов: {{ recipe_count_from_author_id|lookup:author.id }} шт. </a>
+                        <a href="{% url 'profile' author %}" class="card-user__link link">Еще {{ recipe_count_from_author_id|lookup:author.id }} {{ recipe_count_from_author_id|lookup:author.id|conjugate_recipe_word }}... </a>
                     </li>
                 {% endif %}
 

@@ -3,6 +3,7 @@ from collections import defaultdict
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -14,6 +15,7 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from foodgram import settings
 
 from . import domain
+from .domain import conjugate_recipes
 from .domain.user import DomainUser
 from .forms import RecipeForm
 from .models import (Favorite, Follow, Ingredient, Recipe, RecipeIngredient,
@@ -205,11 +207,11 @@ def profile_follow(request):
     authors_queryset = Follow.objects.filter(user=request.user)
     authors = [f.author for f in authors_queryset]
     recipes_from_author_id = {
-        author: Recipe.objects.filter(author__exact=author)[:3]
+        author.id: Recipe.objects.filter(author__exact=author)[:3]
         for author in authors
     }
     recipe_count_from_author_id = {
-        author: Recipe.objects.filter(author__exact=author).count() - 3
+        author.id: Recipe.objects.filter(author__exact=author).count() - 3
         for author in authors
     }
     paginator = Paginator(authors_queryset, settings.ITEMS_PER_PAGE)

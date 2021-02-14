@@ -29,8 +29,7 @@ services:
             - ./.env
 
     web:
-#        image: 758493/foodgram:v8
-        build: .
+        image: 758493/foodgram:v9
         restart: always
         volumes:
             - static_volume:/code/static
