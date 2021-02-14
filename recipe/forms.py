@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ImageField
 from django.forms.widgets import ClearableFileInput
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext_lazy as _
 
 from .domain.recipe import EVERY_TAG
 from .models import Recipe, Tag
@@ -27,7 +28,7 @@ class RecipeForm(forms.ModelForm):
 
     class Meta:
         model = Recipe
-        fields = ('name', 'text', 'image', 'tags', 'cooking_time')
+        fields = ('name', 'text', 'image', 'tags', 'ingredients', 'cooking_time')
         exclude = ('ingredients', )
         help_texts = {
             'name': 'Название рецепта',

@@ -54,14 +54,14 @@
 
                     </div>
                     <span class="form__ingredient-link" id="addIng">Добавить ингредиент</span>
-                    <span class="form__error"></span>
+                    <span class="form__error">{{ special_err }}</span>
                 </div>
             </div>            <div class="form__group">
                 <label for="id_time" class="form__label">{{ form.cooking_time.label_tag }}</label>
                 <div class="form__field-group form__field-group_time">
                     <input value="{{ form.cleaned_data.cooking_time }}" type="text" id="id_time" name="cooking_time" class="form__input">
                     <label for="id_time" class="form__label">минут</label>
-                    <span class="form__error"></span>
+                    <span class="form__error">{{ form.cooking_time.errors }}</span>
                 </div>
             </div>
             <div class="form__group">

@@ -68,19 +68,31 @@ def index(request):
 def new_recipe(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     ingredients = domain.get_ingredients_for_recipe_form(request.POST)
+    special_err = 'Что-то пошло не так.'
     if form.is_valid():
         if request.user.is_authenticated:
             recipe = form.save(commit=False)
             recipe.author = request.user
-            recipe.save()
+            recipe_ingredients = []
             for (item, amount) in ingredients:
-                RecipeIngredient.objects.create(
-                    ingredient=get_object_or_404(Ingredient,
-                                                 title__exact=item),
-                    amount=amount,
-                    recipe=recipe,
-                )
-            form.save_m2m()
+                ingredient = Ingredient.objects.filter(
+                    title__exact=item).first()
+                recipe_ingredient = RecipeIngredient(ingredient=ingredient,
+                                                     amount=amount,
+                                                     recipe=recipe)
+                try:
+                    recipe_ingredient.clean_fields()
+                except ValidationError as e:
+                    if e.message_dict.keys() != {'recipe'}:
+                        return render(request, 'formRecipe.html', {
+                            'form': form,
+                            'is_user_authenticated': request.user.is_authenticated,
+                            'special_err': special_err
+                        })
+                recipe_ingredients.append(recipe_ingredient)
+            recipe.save()
+            for recipe_ingredient in recipe_ingredients:
+                recipe_ingredient.save()
             return redirect('index')
         return redirect('login')
     return render(request, 'formRecipe.html', {
