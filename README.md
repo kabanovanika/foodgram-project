@@ -1,7 +1,6 @@
 # Foodgram-project
 
 Foodgram-project - social network for people, passionate about cooking! It is like Instagram, but only for tasty recipes :) 
-Go for it and check yourself via link [http://130.193.42.192/home/](http://130.193.42.192/home/)
 
 ## Getting Started
 
