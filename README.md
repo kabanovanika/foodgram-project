@@ -49,4 +49,4 @@ You may also add all necessary information (as tags and recipes) via admin inter
 
 ## Authors
 
-* **Nika Kabanova** - *Initial work* - [kabanovanika](https://github.com/kabanovanika) - Yandex.Praktikum student 🤓 
+* **Nika Dmitrievskaya** - *Initial work* - [kabanovanika](https://github.com/kabanovanika) - Yandex.Praktikum student 🤓 
