@@ -36,7 +36,7 @@ PyYAML==5.4.1
 requests==2.25.1
 six==1.15.0
 sorl-thumbnail==12.7.0
-sqlparse==0.4.1
+sqlparse==0.4.2
 texttable==1.6.3
 toml==0.10.2
 typing-extensions==3.7.4.3
